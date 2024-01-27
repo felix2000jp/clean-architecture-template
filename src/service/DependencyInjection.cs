@@ -1,0 +1,25 @@
+using core.Notes;
+using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
+using service.Behaviours;
+using service.Notes;
+
+namespace service;
+
+public static class DependencyInjection
+{
+    public static void AddServiceLayer(this IServiceCollection services)
+    {
+        var assembly = typeof(DependencyInjection).Assembly;
+
+        services.AddValidatorsFromAssembly(assembly);
+        services.AddMediatR(config =>
+        {
+            config.RegisterServicesFromAssembly(assembly);
+            config.AddOpenBehavior(typeof(ValidationBehaviour<,>));
+            config.AddOpenBehavior(typeof(LoggingBehaviour<,>));
+        });
+
+        services.AddScoped<INoteService, NoteService>();
+    }
+}
