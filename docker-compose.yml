@@ -3,16 +3,18 @@
 # To run the application -> docker compose up
 services:
   tests-unit:
+    image: "${TESTING_IMAGE}"
     profiles: [ tests ]
     build:
-      dockerfile: Dockerfile
       context: .
+      dockerfile: Dockerfile
       target: tests-unit
   tests-integration:
+    image: "${TESTING_IMAGE}"
     profiles: [ tests ]
     build:
-      dockerfile: Dockerfile
       context: .
+      dockerfile: Dockerfile
       target: tests-integration
     environment:
       TESTCONTAINERS_HOST_OVERRIDE: host.docker.internal
@@ -21,8 +23,8 @@ services:
 
   notes:
     build:
-      dockerfile: Dockerfile
       context: .
+      dockerfile: Dockerfile
     environment:
       ALLOWEDHOSTS: "*"
       ASPNETCORE_URLS: "http://notes"
