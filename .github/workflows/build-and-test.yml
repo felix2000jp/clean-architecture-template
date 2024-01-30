@@ -29,11 +29,11 @@ jobs:
           context: .
           push: false
           load: true
-          tags: ${{ github.run_id }}
+          tags: notes
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Run unit tests
         run: |
-          export TESTING_IMAGE="${{ github.run_id }}"
+          export TESTING_IMAGE="notes"
           docker compose up tests-unit --exit-code-from tests-unit
