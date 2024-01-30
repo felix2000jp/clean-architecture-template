@@ -4,7 +4,6 @@
 services:
   tests-unit:
     profiles: [ tests ]
-    image: notes
     build:
       context: .
       target: tests-unit

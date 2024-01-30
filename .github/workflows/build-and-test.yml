@@ -26,7 +26,7 @@ jobs:
       - name: Docker build testing image
         uses: docker/build-push-action@v5
         with:
-          tags: notes
+          tags: ${{ github.run_id }}
           push: false
           load: true
           target: build
