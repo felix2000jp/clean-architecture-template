@@ -26,7 +26,7 @@ jobs:
       - name: Docker build testing image
         uses: docker/build-push-action@v5
         with:
-          tags: notes
+          tags: ${{ github.run_id }}
           push: false
           load: true
           cache-from: type=gha
@@ -34,4 +34,5 @@ jobs:
 
       - name: Run unit tests
         run: |
+          export notes="${{ github.run_id }}"
           docker compose up tests-unit --exit-code-from tests-unit
