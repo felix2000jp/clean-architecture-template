@@ -26,13 +26,12 @@ jobs:
       - name: Docker build testing image
         uses: docker/build-push-action@v5
         with:
+          tags: notes
           push: false
           load: true
-          tags: notes
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Run unit tests
         run: |
-          export TESTING_IMAGE="notes"
           docker compose up tests-unit --exit-code-from tests-unit
