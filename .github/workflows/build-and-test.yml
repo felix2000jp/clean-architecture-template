@@ -34,4 +34,5 @@ jobs:
 
       - name: Run unit tests
         run: |
+          export TESTING_IMAGE="${{ github.run_id }}"
           docker compose up tests-unit
