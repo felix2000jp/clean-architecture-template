@@ -56,19 +56,8 @@ jobs:
         run: |
           docker compose up tests-integration --abort-on-container-exit
 
-      - name: Docker Metadata for Final Image Build
-        uses: docker/metadata-action@v5
-        with:
-          images: felix2000jp/clean-architecture-template
-          flavor: latest=false
-          tags: type=raw,value=09
-        id: docker_meta
-
       - name: Build final image
         uses: docker/build-push-action@v5
         with:
-          tags: ${{ steps.docker_meta.outputs.tags }}
-          labels: ${{ steps.docker_meta.outputs.labels }}
+          tags: ${{ github.head_ref }}_${{ github.sha }}
           push: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
