@@ -4,7 +4,7 @@
 services:
   tests-unit:
     profiles: [ tests ]
-    image: "${TESTING_IMAGE}"
+    image: notes
     build:
       context: .
       target: tests-unit
