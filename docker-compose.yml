@@ -7,7 +7,7 @@ services:
     image: notes
     build:
       context: .
-      target: tests-unit
+      target: tests-unit-runner
   tests-integration:
     profiles: [ tests ]
     image: notes
