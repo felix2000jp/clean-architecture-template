@@ -27,7 +27,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          target: build
           tags: notes
           push: false
           load: true
