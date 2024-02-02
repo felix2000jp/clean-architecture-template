@@ -29,7 +29,6 @@ jobs:
           tags: notes
           push: false
           load: true
-          target: build
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
