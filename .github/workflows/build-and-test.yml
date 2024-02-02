@@ -28,10 +28,13 @@ jobs:
         with:
           tags: notes
           push: false
-          load: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Run unit tests
         run: |
           docker compose up tests-unit --exit-code-from tests-unit
+      
+      - name: Run integration tests
+        run: |
+          docker compose up tests-integration --exit-code-from tests-integration
