@@ -62,6 +62,7 @@ jobs:
           images: felix2000jp/clean-architecture-template
           flavor: latest=false
           tags: type=raw,value=09
+        id: docker_meta
 
       - name: Build final image
         uses: docker/build-push-action@v5
