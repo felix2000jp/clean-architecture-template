@@ -27,7 +27,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          target: tests-unit
           tags: notes
           push: false
           load: true
@@ -37,3 +36,7 @@ jobs:
       - name: Run unit tests
         run: |
           docker compose up tests-unit --exit-code-from tests-unit
+
+#      - name: Run integration tests
+#        run: |
+#            docker compose up tests-unit --exit-code-from tests-unit
