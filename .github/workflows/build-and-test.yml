@@ -23,15 +23,6 @@ jobs:
       - name: Checkout git repo
         uses: actions/checkout@v4
 
-      - name: Docker build image
-        uses: docker/build-push-action@v5
-        with:
-          tags: notes
-          push: false
-          load: false
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
       - name: Run unit tests
         run: |
           docker compose up tests-unit --exit-code-from tests-unit
