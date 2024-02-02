@@ -23,7 +23,7 @@ jobs:
       - name: Checkout git repo
         uses: actions/checkout@v4
 
-      - name: Docker build testing image
+      - name: Docker build image
         uses: docker/build-push-action@v5
         with:
           tags: notes
