@@ -40,7 +40,9 @@ jobs:
           target: tests-unit
           tags: clean-architecture-template-tests-unit
           push: false
-          load: false
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Run unit tests
         run: |
@@ -52,7 +54,9 @@ jobs:
           target: tests-integration
           tags: clean-architecture-template-tests-integration
           push: false
-          load: false
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Run integration tests
         run: |
@@ -64,3 +68,5 @@ jobs:
           tags: ${{ github.sha }}
           push: true
           load: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
