@@ -27,7 +27,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           target: build
-          tags: notes
+          tags: notes-build
           push: false
           load: true
           cache-from: type=gha
