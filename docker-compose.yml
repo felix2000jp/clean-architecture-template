@@ -4,6 +4,7 @@
 services:
   tests-unit:
     profiles: [ tests ]
+    image: notes:latest
     build:
       target: tests-unit
   tests-integration:
