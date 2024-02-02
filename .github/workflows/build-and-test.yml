@@ -28,7 +28,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           target: build
-          tags: build
           push: false
           load: true
 
