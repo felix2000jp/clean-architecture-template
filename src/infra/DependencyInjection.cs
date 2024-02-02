@@ -33,10 +33,10 @@ public static class DependencyInjection
 
         if (isConnectionValid)
         {
-            Console.WriteLine("No connection found");
+            context.Database.Migrate();
             return;
         }
-
-        context.Database.Migrate();
+        
+        Console.WriteLine("No connection found");
     }
 }
