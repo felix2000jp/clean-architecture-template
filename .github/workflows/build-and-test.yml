@@ -34,7 +34,7 @@ jobs:
 
       - name: Run unit tests
         run: |
-          docker compose up tests-unit --exit-code-from tests-unit
+          docker compose up tests-unit --build --abort-on-container-exit
       
       - name: Run integration tests
         run: |
