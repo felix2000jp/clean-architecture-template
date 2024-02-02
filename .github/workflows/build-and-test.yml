@@ -32,7 +32,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,scope=image,mode=max
  
-      - name: Docker build unit test
+      - name: Docker build unit tests
         uses: docker/build-push-action@v5
         with:
           target: tests-unit
@@ -45,6 +45,15 @@ jobs:
         run: |
           docker compose up tests-unit --abort-on-container-exit
 
-#      - name: Run integration tests
-#        run: |
-#          docker compose up tests-integration --abort-on-container-exit
+      - name: Docker build integration tests
+        uses: docker/build-push-action@v5
+        with:
+          target: tests-integration
+          tags: clean-architecture-template-tests-integration
+          push: false
+          load: true
+          cache-from: type=gha
+
+      - name: Run integration tests
+        run: |
+          docker compose up tests-integration --abort-on-container-exit
