@@ -27,8 +27,6 @@ jobs:
       - name: Docker build testing image
         uses: docker/build-push-action@v5
         with:
-          target: build
-          tags: build
           push: false
           load: true
           cache-from: type=gha
@@ -46,7 +44,7 @@ jobs:
 
       - name: Run unit tests
         run: |
-          docker compose -f docker-compose.override.yml up tests-unit --abort-on-container-exit
+          docker compose -f docker-compose.yml -f docker-compose.override.yml up tests-unit --abort-on-container-exit
 
       - name: Docker build integration tests
         uses: docker/build-push-action@v5
@@ -60,7 +58,7 @@ jobs:
 
       - name: Run integration tests
         run: |
-          docker compose -f docker-compose.override.yml up tests-integration --abort-on-container-exit
+          docker compose -f docker-compose.yml -f docker-compose.override.yml up tests-integration --abort-on-container-exit
 
       - name: Build final image
         uses: docker/build-push-action@v5
