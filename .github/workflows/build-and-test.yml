@@ -6,7 +6,7 @@ on:
       - main
   pull_request:
 
-jobs: 
+jobs:
   build-image:
     name: Build image
     runs-on: ubuntu-latest
@@ -31,7 +31,7 @@ jobs:
           load: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
- 
+
       - name: Docker build unit tests
         uses: docker/build-push-action@v5
         with:
@@ -39,10 +39,12 @@ jobs:
           tags: clean-architecture-template-tests-unit
           push: false
           load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Run unit tests
         run: |
-          docker compose up tests-unit --abort-on-container-exit
+          docker compose -f docker-compose.yml -f docker-compose.override.yml up tests-unit --abort-on-container-exit
 
       - name: Docker build integration tests
         uses: docker/build-push-action@v5
@@ -51,13 +53,18 @@ jobs:
           tags: clean-architecture-template-tests-integration
           push: false
           load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Run integration tests
         run: |
-          docker compose up tests-integration --abort-on-container-exit
+          docker compose -f docker-compose.yml -f docker-compose.override.yml up tests-integration --abort-on-container-exit
 
       - name: Build final image
         uses: docker/build-push-action@v5
         with:
           tags: ${{ github.head_ref }}_${{ github.sha }}
           push: true
+          load: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
