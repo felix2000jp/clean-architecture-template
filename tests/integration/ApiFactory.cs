@@ -16,7 +16,7 @@ public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         .WithDatabase("notes-db")
         .WithUsername("root")
         .WithPassword("1234")
-        .WithWaitStrategy(Wait.ForUnixContainer().UntilContainerIsHealthy())
+        .WithStartupCallback((resourceReaper, ct) => Task.Delay(TimeSpan.FromSeconds(5), ct))
         .Build();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
