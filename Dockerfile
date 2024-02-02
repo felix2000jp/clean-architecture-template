@@ -1,7 +1,7 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
+﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS base
+WORKDIR /src
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM base AS build
 WORKDIR /src
 COPY ["src/api/api.csproj", "api/"]
 COPY ["src/service/service.csproj", "service/"]
@@ -33,7 +33,7 @@ ENTRYPOINT ["dotnet", "test", "integration/integration.csproj"]
 FROM build AS publish
 RUN dotnet publish "api/api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "api.dll"]
