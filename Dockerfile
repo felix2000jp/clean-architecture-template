@@ -20,7 +20,7 @@ COPY ["tests/unit/unit.csproj", "unit/"]
 RUN dotnet restore "unit/unit.csproj"
 COPY ["tests/unit/", "unit/"]
 RUN dotnet build --no-restore
-CMD ["dotnet", "test", "unit/unit.csproj", "--no-restore", "--no-build"]
+ENTRYPOINT ["dotnet", "test", "unit/unit.csproj", "--no-restore", "--no-build"]
 
 FROM build AS tests-integration
 WORKDIR /tests

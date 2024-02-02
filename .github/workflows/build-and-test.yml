@@ -26,7 +26,6 @@ jobs:
       - name: Docker build testing image
         uses: docker/build-push-action@v5
         with:
-          context: .
           tags: notes
           push: false
           load: true
@@ -35,8 +34,8 @@ jobs:
 
       - name: Run unit tests
         run: |
+          docker build . --target tests-unit
           docker compose up tests-unit --exit-code-from tests-unit
-
 #      - name: Run integration tests
 #        run: |
 #            docker compose up tests-unit --exit-code-from tests-unit
