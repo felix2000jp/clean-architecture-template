@@ -1,3 +1,4 @@
+using DotNet.Testcontainers.Builders;
 using infra.Context;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -15,6 +16,7 @@ public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         .WithDatabase("notes-db")
         .WithUsername("root")
         .WithPassword("1234")
+        .WithWaitStrategy(Wait.ForUnixContainer().UntilContainerIsHealthy())
         .Build();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
