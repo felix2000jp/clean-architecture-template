@@ -23,7 +23,7 @@ jobs:
       - name: Checkout git repo
         uses: actions/checkout@v4
 
-      - name: Docker build image
+      - name: Docker build testing image
         uses: docker/build-push-action@v5
         with:
           target: build
@@ -55,3 +55,20 @@ jobs:
       - name: Run integration tests
         run: |
           docker compose up tests-integration --abort-on-container-exit
+
+      - name: Docker Metadata for Final Image Build
+        uses: docker/metadata-action@v5
+        with:
+          images: felix2000jp/clean-architecture-template
+          flavor: latest=false
+          tags: type=raw,value=09
+
+      - name: Build final image
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          labels: ${{ steps.docker_meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
