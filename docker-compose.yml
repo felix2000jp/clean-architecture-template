@@ -4,13 +4,13 @@
 services:
   tests-unit:
     profiles: [ tests ]
-    image: notes
+    image: notes:latest
     build:
       context: .
       target: tests-unit
   tests-integration:
     profiles: [ tests ]
-    image: notes
+    image: notes:latest
     build:
       context: .
       target: tests-integration
