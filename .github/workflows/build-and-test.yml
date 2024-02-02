@@ -38,6 +38,8 @@ jobs:
           target: tests-unit
           push: false
           load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Run unit tests
         run: |
