@@ -23,13 +23,13 @@ jobs:
       - name: Checkout git repo
         uses: actions/checkout@v4
 
-      - name: Docker build image
+      - name: Docker build testing image
         uses: docker/build-push-action@v5
         with:
-          target: build
+          target: tests
           tags: notes:latest
-          push: true
-          load: false
+          push: false
+          load: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
