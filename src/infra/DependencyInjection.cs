@@ -29,6 +29,14 @@ public static class DependencyInjection
             throw new ArgumentException("Data context cannot be null");
         }
 
+        var isConnectionValid = context.Database.CanConnect();
+
+        if (isConnectionValid)
+        {
+            Console.WriteLine("No connection found");
+            return;
+        }
+
         context.Database.Migrate();
     }
 }

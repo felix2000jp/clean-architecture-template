@@ -1,6 +1,6 @@
 # To run unit tests -> docker compose up tests-unit
 # To run integration tests -> docker compose up tests-integration
-# To run manually the application -> docker compose up
+# To run the application manually -> docker compose up
 services:
   tests-unit:
     profiles: [ tests ]
