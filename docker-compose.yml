@@ -12,6 +12,7 @@ services:
       target: tests-integration
     environment:
       TESTCONTAINERS_HOST_OVERRIDE: host.docker.internal
+      ConsoleLogger__Instance__DebugLogLevelEnabled: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
