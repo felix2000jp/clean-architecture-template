@@ -26,6 +26,7 @@ jobs:
       - name: Docker build image
         uses: docker/build-push-action@v5
         with:
+          target: build
           tags: notes:latest
           push: false
           load: true
