@@ -21,19 +21,11 @@ RUN dotnet restore "unit/unit.csproj"
 COPY ["tests/unit/", "unit/"]
 ENTRYPOINT ["dotnet", "test", "unit/unit.csproj"]
 
-FROM tests-unit AS tests-unit-runner
-WORKDIR /tests
-ENTRYPOINT ["dotnet", "test", "unit/unit.csproj"]
-
 FROM build AS tests-integration
 WORKDIR /tests
 COPY ["tests/integration/integration.csproj", "integration/"]
 RUN dotnet restore "integration/integration.csproj"
 COPY ["tests/integration/", "integration/"]
-ENTRYPOINT ["dotnet", "test", "integration/integration.csproj"]
-
-FROM build AS tests-integration-runner
-WORKDIR /tests
 ENTRYPOINT ["dotnet", "test", "integration/integration.csproj"]
 
 FROM build AS publish

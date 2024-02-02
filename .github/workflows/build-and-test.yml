@@ -23,27 +23,14 @@ jobs:
       - name: Checkout git repo
         uses: actions/checkout@v4
 
-      - name: Docker build build image
+      - name: Docker build image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          target: build
+          tags: notes
           push: false
-          load: true
-          cache-from: type=gha,scope=build
-          cache-to: type=gha,scope=base,mode=max
-
-      - name: Docker build tests-unit image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          target: tests-unit
-          push: false
-          load: true
-          cache-from: | 
-            type=gha,scope=build
-            type=gha,scope=scope=tests-unit
-          cache-to: type=gha,scope=tests-unit,mode=max
+          load: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Run unit tests
         run: |
