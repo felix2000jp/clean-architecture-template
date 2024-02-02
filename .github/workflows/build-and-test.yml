@@ -29,7 +29,7 @@ jobs:
           target: build
           tags: notes:latest
           push: true
-          load: true
+          load: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -39,4 +39,4 @@ jobs:
       
       - name: Run integration tests
         run: |
-          docker compose up tests-integration --exit-code-from tests-integration
+          docker compose up tests-integration --abort-on-container-exit
