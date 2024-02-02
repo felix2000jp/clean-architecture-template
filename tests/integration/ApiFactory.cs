@@ -1,3 +1,4 @@
+using DotNet.Testcontainers.Builders;
 using infra.Context;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -15,6 +16,7 @@ public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         .WithDatabase("notes-db")
         .WithUsername("root")
         .WithPassword("1234")
+        .WithWaitStrategy(Wait.ForUnixContainer())
         .Build();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -34,13 +36,7 @@ public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         });
     }
 
-    public async Task InitializeAsync()
-    {
-        await _databaseContainer.StartAsync();
-    }
+    public async Task InitializeAsync() => await _databaseContainer.StartAsync();
 
-    public new async Task DisposeAsync()
-    {
-        await _databaseContainer.DisposeAsync();
-    }
+    public new async Task DisposeAsync() => await _databaseContainer.DisposeAsync().AsTask();
 }

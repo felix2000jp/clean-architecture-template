@@ -1,5 +1,5 @@
-# To run unit tests -> docker compose up tests-unit --abort-on-container-exit
-# To run integration tests -> docker compose up tests-integration --abort-on-container-exit
+# To run unit tests -> docker compose up tests-unit
+# To run integration tests -> docker compose up tests-integration
 # To run the application manually -> docker compose up
 services:
   tests-unit:
@@ -12,7 +12,6 @@ services:
       target: tests-integration
     environment:
       TESTCONTAINERS_HOST_OVERRIDE: host.docker.internal
-      ConsoleLogger__Instance__DebugLogLevelEnabled: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
