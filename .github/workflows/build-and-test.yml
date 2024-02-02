@@ -27,10 +27,10 @@ jobs:
       - name: Docker build testing image
         uses: docker/build-push-action@v5
         with:
+          target: build
+          tags: build
           push: false
-          load: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          load: false
 
       - name: Docker build unit tests
         uses: docker/build-push-action@v5
@@ -38,9 +38,7 @@ jobs:
           target: tests-unit
           tags: clean-architecture-template-tests-unit
           push: false
-          load: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          load: false
 
       - name: Run unit tests
         run: |
@@ -52,9 +50,7 @@ jobs:
           target: tests-integration
           tags: clean-architecture-template-tests-integration
           push: false
-          load: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          load: false
 
       - name: Run integration tests
         run: |
@@ -66,5 +62,3 @@ jobs:
           tags: ${{ github.sha }}
           push: true
           load: false
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
