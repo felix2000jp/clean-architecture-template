@@ -29,9 +29,6 @@ public static class DependencyInjection
             throw new ArgumentException("Data context cannot be null");
         }
 
-        if (context.Database.CanConnect())
-        {
-            context.Database.Migrate();
-        }
+        context.Database.Migrate();
     }
 }
