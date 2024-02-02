@@ -27,8 +27,11 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           tags: notes
+          target: build
           push: false
           load: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Run unit tests
         run: |
