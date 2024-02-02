@@ -54,4 +54,4 @@ jobs:
 
       - name: Run integration tests
         run: |
-          docker compose up tests-integration --abort-on-container-exit
+          docker run -v /var/run/docker.sock.raw:/var/run/docker.sock tests-integration
