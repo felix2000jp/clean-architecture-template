@@ -1,5 +1,5 @@
-# To run unit tests -> docker compose up tests-unit
-# To run integration tests -> docker compose up tests-integration
+# To run unit tests -> docker compose up tests-unit --abort-on-container-exit
+# To run integration tests -> docker compose up tests-integration --abort-on-container-exit
 # To run the application manually -> docker compose up
 services:
   tests-unit:
