@@ -26,6 +26,7 @@ jobs:
       - name: Docker build testing image
         uses: docker/build-push-action@v5
         with:
+          context: .
           tags: notes
           push: false
           load: true
