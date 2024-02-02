@@ -4,12 +4,12 @@
 services:
   tests-unit:
     profiles: [ tests ]
-    image: notes
+    image: tests-unit
     build:
       target: tests-unit
   tests-integration:
     profiles: [ tests ]
-    image: notes
+    image: tests-integration
     build:
       target: tests-integration
     environment:
