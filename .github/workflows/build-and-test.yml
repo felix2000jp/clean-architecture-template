@@ -28,7 +28,7 @@ jobs:
         with:
           tags: notes
           push: false
-          load: true
+          load: false
 
       - name: Run unit tests
         run: |
