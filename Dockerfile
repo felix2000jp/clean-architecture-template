@@ -20,7 +20,7 @@ COPY ["tests/unit/unit.csproj", "unit/"]
 RUN dotnet restore "unit/unit.csproj"
 COPY ["tests/unit/", "unit/"]
 RUN dotnet build "unit/unit.csproj"
-RUN dotnet test unit/unit.csproj --no-restore --no-build
+CMD dotnet test unit/unit.csproj --no-restore --no-build
 
 FROM build AS tests-integration
 WORKDIR /tests
@@ -28,7 +28,7 @@ COPY ["tests/integration/integration.csproj", "integration/"]
 RUN dotnet restore "integration/integration.csproj"
 COPY ["tests/integration/", "integration/"]
 RUN dotnet build "integration/integration.csproj"
-RUN dotnet test integration/integration.csproj --no-restore --no-build
+CMD dotnet test integration/integration.csproj --no-restore --no-build
 
 FROM build AS publish
 RUN dotnet publish "api/api.csproj" -c Release -o /app/publish /p:UseAppHost=false
