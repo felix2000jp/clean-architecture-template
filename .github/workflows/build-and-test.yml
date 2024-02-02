@@ -30,8 +30,6 @@ jobs:
           target: build
           push: false
           load: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
       - name: Docker build unit tests
         uses: docker/build-push-action@v5
