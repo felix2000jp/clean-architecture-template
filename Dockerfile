@@ -14,7 +14,11 @@ COPY ["src/core/", "core/"]
 COPY ["src/infra/", "infra/"]
 RUN dotnet build "api/api.csproj"
 
-FROM build AS tests-unit
+
+FROM build AS tests
+WORKDIR /tests
+
+FROM tests AS tests-unit
 WORKDIR /tests
 COPY ["tests/unit/unit.csproj", "unit/"]
 RUN dotnet restore "unit/unit.csproj"
@@ -22,7 +26,7 @@ COPY ["tests/unit/", "unit/"]
 RUN dotnet build "unit/unit.csproj"
 ENTRYPOINT ["dotnet", "test", "unit/unit.csproj", "--no-restore", "--no-build"]
 
-FROM build AS tests-integration
+FROM tests AS tests-integration
 WORKDIR /tests
 COPY ["tests/integration/integration.csproj", "integration/"]
 RUN dotnet restore "integration/integration.csproj"
