@@ -67,9 +67,8 @@ jobs:
       - name: Build final image
         uses: docker/build-push-action@v5
         with:
-          push: true
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
+          push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
