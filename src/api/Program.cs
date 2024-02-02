@@ -18,7 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
 {
-    //app.Services.ApplyMigrations();
+    app.Services.ApplyMigrations();
 
     app.UseSerilogRequestLogging();
     app.UseMiddleware<ExceptionMiddleware>();
