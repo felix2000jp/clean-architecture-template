@@ -27,6 +27,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           target: build
+          tags: build
           push: false
           load: true
           cache-from: type=gha
@@ -39,8 +40,6 @@ jobs:
           tags: clean-architecture-template-tests-unit
           push: false
           load: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
       - name: Run unit tests
         run: |
@@ -53,8 +52,6 @@ jobs:
           tags: clean-architecture-template-tests-integration
           push: false
           load: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
       - name: Run integration tests
         run: |
@@ -65,3 +62,4 @@ jobs:
         with:
           tags: ${{ github.sha }}
           push: true
+          load: false
