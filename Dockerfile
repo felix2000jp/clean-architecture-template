@@ -12,14 +12,14 @@ COPY ["src/api/", "api/"]
 COPY ["src/service/", "service/"]
 COPY ["src/core/", "core/"]
 COPY ["src/infra/", "infra/"]
-RUN dotnet build "api/api.csproj"
+RUN dotnet build "api/api.csproj" --no-restore
 
 FROM build AS tests-unit
 WORKDIR /tests
 COPY ["tests/unit/unit.csproj", "unit/"]
 RUN dotnet restore "unit/unit.csproj"
 COPY ["tests/unit/", "unit/"]
-RUN dotnet build "unit/unit.csproj"
+RUN dotnet build "unit/unit.csproj" --no-restore
 ENTRYPOINT ["dotnet", "test", "unit/unit.csproj", "--no-restore", "--no-build"]
 
 FROM build AS tests-integration
@@ -27,7 +27,7 @@ WORKDIR /tests
 COPY ["tests/integration/integration.csproj", "integration/"]
 RUN dotnet restore "integration/integration.csproj"
 COPY ["tests/integration/", "integration/"]
-RUN dotnet build "integration/integration.csproj"
+RUN dotnet build "integration/integration.csproj" --no-restore
 ENTRYPOINT ["dotnet", "test", "integration/integration.csproj", "--no-restore", "--no-build"]
 
 FROM build AS publish
