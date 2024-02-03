@@ -85,55 +85,53 @@ jobs:
       - name: Run unit tests
         run: |
           docker compose -f docker-compose.yml -f docker-compose.override.yml up tests-unit --abort-on-container-exit
+          docker compose down
 
+  run-integration-tests:
+    name: Run integration tests
+    needs: [ build-builder-image ]
+    runs-on: ubuntu-latest
 
-#  build-image:
-#    name: Build image
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Login to docker hub
-#        uses: docker/login-action@v3
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          password: ${{ secrets.DOCKERHUB_TOKEN }}
-#
-#      - name: Set up docker buildx
-#        uses: docker/setup-buildx-action@v3
-#
-#      - name: Checkout git repo
-#        uses: actions/checkout@v4
-#
-#      - name: Docker build testing image
-#        uses: docker/build-push-action@v5
-#        with:
-#          target: build
-#          push: false
-#          load: true
-#
-#      - name: Docker build unit tests
-#        uses: docker/build-push-action@v5
-#        with:
-#          target: tests-unit
-#          tags: clean-architecture-template-tests-unit
-#          push: false
-#          load: true
-#
-#      - name: Run unit tests
-#        run: |
-#          docker compose -f docker-compose.yml -f docker-compose.override.yml up tests-unit --abort-on-container-exit
-#
-#      - name: Docker build integration tests
-#        uses: docker/build-push-action@v5
-#        with:
-#          target: tests-integration
-#          tags: clean-architecture-template-tests-integration
-#          push: false
-#          load: true
-#
-#      - name: Run integration tests
-#        run: |
-#          docker compose -f docker-compose.yml -f docker-compose.override.yml up tests-integration --abort-on-container-exit
-#
+    permissions:
+      packages: read
+    
+    steps:
+
+      - name: Login to docker hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to ghcr.io registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up docker buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Checkout git repo
+        uses: actions/checkout@v4
+
+      - name: Build integration tests
+        uses: docker/build-push-action@v5
+        with:
+          target: tests-integration
+          tags: clean-architecture-template-tests-integration
+          push: false
+          load: true
+          build-contexts: |
+            builder=docker-image://ghcr.io/felix2000jp/clean-architecture-template:${{ github.run_id }}
+
+      - name: Run integration tests
+        run: |
+          docker compose -f docker-compose.yml -f docker-compose.override.yml up tests-integration --abort-on-container-exit
+          docker compose down
+  
+
 #      - name: Docker metadata for final image
 #        uses: docker/metadata-action@v5
 #        with:
