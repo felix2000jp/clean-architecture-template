@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      packages: read
+      packages: write
 
     steps:
 
@@ -92,7 +92,7 @@ jobs:
         with:
           package-name: clean-architecture-template
           package-type: container
-          delete-only-untagged-versions: true
+          delete-only-untagged-versions: "true"
 
   run-integration-tests:
     name: Run integration tests
