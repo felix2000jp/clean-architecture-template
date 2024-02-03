@@ -161,7 +161,9 @@ jobs:
       - name: Docker metadata for final image
         uses: docker/metadata-action@v5
         with:
-          images: felix2000jp/clean-architecture-template
+          images: felix2000jp/clean-architecture-template, ghcr.io/felix2000jp/clean-architecture-template
+          flavor: latest=false
+          tags: type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
         id: docker_meta
 
       - name: Build final image
