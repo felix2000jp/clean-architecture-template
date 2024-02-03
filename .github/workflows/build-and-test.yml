@@ -79,9 +79,8 @@ jobs:
           tags: clean-architecture-template-tests-unit
           push: false
           load: true
-          cache-from: type=gha
-#          build-contexts: |
-#            builder=docker-image://ghcr.io/felix2000jp/clean-architecture-template:${{ github.run_id }}
+          build-contexts: |
+            builder=docker-image://ghcr.io/felix2000jp/clean-architecture-template:${{ github.run_id }}
 
       - name: Run unit tests
         run: |
