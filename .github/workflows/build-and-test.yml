@@ -37,7 +37,10 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           target: builder
-          push: true
+          push: false
+          load: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   run-unit-tests:
     name: Run unit tests
