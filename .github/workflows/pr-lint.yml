@@ -1,4 +1,4 @@
-name: PR Lint
+name: Validate PR Title
 
 on:
   pull_request:
@@ -6,7 +6,9 @@ on:
 
 jobs:
   pr-lint:
+    name: PR Lint
     runs-on: ubuntu-latest
+    
     steps:
       - uses: morrisoncole/pr-lint-action@main
         with:

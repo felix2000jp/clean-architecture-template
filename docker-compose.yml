@@ -1,18 +1,14 @@
 # To run unit tests -> docker compose up tests-unit
 # To run integration tests -> docker compose up tests-integration
-# To run the application -> docker compose up
+# To run the application manually -> docker compose up
 services:
   tests-unit:
     profiles: [ tests ]
     build:
-      dockerfile: Dockerfile
-      context: .
       target: tests-unit
   tests-integration:
     profiles: [ tests ]
     build:
-      dockerfile: Dockerfile
-      context: .
       target: tests-integration
     environment:
       TESTCONTAINERS_HOST_OVERRIDE: host.docker.internal
@@ -21,8 +17,8 @@ services:
 
   notes:
     build:
-      dockerfile: Dockerfile
       context: .
+      dockerfile: Dockerfile
     environment:
       ALLOWEDHOSTS: "*"
       ASPNETCORE_URLS: "http://notes"

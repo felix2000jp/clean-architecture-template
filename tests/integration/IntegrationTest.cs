@@ -17,13 +17,7 @@ public class IntegrationTest : IClassFixture<ApiFactory>, IAsyncLifetime
         DataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
     }
 
-    public async Task InitializeAsync()
-    {
-        await DataContext.Database.EnsureCreatedAsync();
-    }
+    public async Task InitializeAsync() => await DataContext.Database.EnsureCreatedAsync();
 
-    public async Task DisposeAsync()
-    {
-        await DataContext.Database.EnsureDeletedAsync();
-    }
+    public async Task DisposeAsync() => await DataContext.Database.EnsureDeletedAsync();
 }

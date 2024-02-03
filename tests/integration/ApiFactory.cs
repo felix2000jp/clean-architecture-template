@@ -1,9 +1,9 @@
+using DotNet.Testcontainers.Builders;
 using infra.Context;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Testcontainers.PostgreSql;
 using Xunit;
 
@@ -35,13 +35,7 @@ public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         });
     }
 
-    public async Task InitializeAsync()
-    {
-        await _databaseContainer.StartAsync();
-    }
+    public async Task InitializeAsync() => await _databaseContainer.StartAsync();
 
-    public new async Task DisposeAsync()
-    {
-        await _databaseContainer.DisposeAsync();
-    }
+    public new async Task DisposeAsync() => await _databaseContainer.DisposeAsync().AsTask();
 }

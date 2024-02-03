@@ -1,7 +1,7 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS builder
 WORKDIR /src
 COPY ["src/api/api.csproj", "api/"]
 COPY ["src/service/service.csproj", "service/"]
@@ -12,23 +12,25 @@ COPY ["src/api/", "api/"]
 COPY ["src/service/", "service/"]
 COPY ["src/core/", "core/"]
 COPY ["src/infra/", "infra/"]
-RUN dotnet build "api/api.csproj"
+RUN dotnet build "api/api.csproj" --no-restore
 
-FROM build AS tests-unit
+FROM builder AS tests-unit
 WORKDIR /tests
 COPY ["tests/unit/unit.csproj", "unit/"]
 RUN dotnet restore "unit/unit.csproj"
 COPY ["tests/unit/", "unit/"]
-ENTRYPOINT ["dotnet", "test", "unit/unit.csproj"]
+RUN dotnet build "unit/unit.csproj" --no-restore
+ENTRYPOINT ["dotnet", "test", "unit/unit.csproj", "--no-restore", "--no-build"]
 
-FROM build AS tests-integration
+FROM builder AS tests-integration
 WORKDIR /tests
 COPY ["tests/integration/integration.csproj", "integration/"]
 RUN dotnet restore "integration/integration.csproj"
 COPY ["tests/integration/", "integration/"]
-ENTRYPOINT ["dotnet", "test", "integration/integration.csproj"]
+RUN dotnet build "integration/integration.csproj" --no-restore
+ENTRYPOINT ["dotnet", "test", "integration/integration.csproj", "--no-restore", "--no-build"]
 
-FROM build AS publish
+FROM builder AS publish
 RUN dotnet publish "api/api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
