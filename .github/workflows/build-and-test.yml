@@ -168,12 +168,11 @@ jobs:
 
     steps:
 
-      # In GHRC I keep only the latest final image
-      # On Docker Hub I keep every final image built
+      # In GHRC I keep the builders images built
+      # On Docker Hub I keep the final images built
       - name: Clean up ghrc
         uses: actions/delete-package-versions@v4
         with:
           package-name: clean-architecture-template
           package-type: container
-          package-version-ids: "${{ github.run_id }}"
-          min-versions-to-keep: 1
+          delete-only-untagged-versions: true
