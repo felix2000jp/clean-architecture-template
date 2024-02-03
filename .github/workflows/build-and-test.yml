@@ -63,7 +63,7 @@ jobs:
       - name: Build final image
         uses: docker/build-push-action@v5
         with:
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          labels: ${{ steps.docker_meta.outputs.labels }}
           push: true
           load: false
