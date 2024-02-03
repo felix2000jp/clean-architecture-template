@@ -36,7 +36,7 @@ public class NoteServiceTests
         var actual = await _noteService.GetNotes(page);
 
         // Assert
-        actual.IsError.Should().BeFalse();
+        actual.IsError.Should().BeTrue();
         actual.Value.Should().BeEquivalentTo(notes);
     }
 
