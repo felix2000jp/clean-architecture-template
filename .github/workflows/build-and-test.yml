@@ -129,20 +129,13 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Login to ghcr.io registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Set up docker buildx
         uses: docker/setup-buildx-action@v3
 
       - name: Docker metadata for final image
         uses: docker/metadata-action@v5
         with:
-          images: felix2000jp/clean-architecture-template,ghcr.io/felix2000jp/clean-architecture-template
+          images: felix2000jp/clean-architecture-template
           flavor: latest=false
           tags: type=raw,value={{date 'YYYYMMDD:hhmmss'}}-${{ github.event.pull_request.head.sha }}
         id: docker_meta
