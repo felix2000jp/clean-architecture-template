@@ -150,20 +150,20 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # clean-up-ghrc:
-  #   name: Clean up ghrc
-  #   needs: [ build-final-image ]
-  #   runs-on: ubuntu-latest
+  clean-up-ghrc:
+    name: Clean up ghrc
+    needs: [ build-final-image ]
+    runs-on: ubuntu-latest
 
-  #   permissions:
-  #     packages: write
+    permissions:
+      packages: write
 
-  #   steps:
+    steps:
 
-  #     - name: Clean up ghrc
-  #       uses: actions/delete-package-versions@v4
-  #       with:
-  #         package-name: clean-architecture-template
-  #         package-type: container
-  #         min-versions-to-keep: 0
+      - name: Clean up ghrc
+        uses: actions/delete-package-versions@v4
+        with:
+          package-name: clean-architecture-template
+          package-type: container
+          min-versions-to-keep: 0
     
