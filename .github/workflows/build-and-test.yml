@@ -2,9 +2,9 @@ name: Build and Test
 
 on:
   push:
-    branches:
-      - main
+    branches: main
   pull_request:
+    branches: main
 
 jobs:
 
@@ -163,7 +163,8 @@ jobs:
         with:
           images: ghcr.io/felix2000jp/clean-architecture-template
           flavor: latest=false
-          tags: type=edge,branch=${{ github.head_ref }}
+          tags: type=raw,value={{date 'YYYYMMDD:hhmmss'}}-{{sha}}
+          context: git
         id: docker_meta
 
       - name: Build final image
