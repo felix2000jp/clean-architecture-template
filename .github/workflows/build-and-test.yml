@@ -175,5 +175,5 @@ jobs:
         with:
           package-name: clean-architecture-template
           package-type: container
-          package-version-ids: ${{ github.run_id }}
+          package-version-ids: ghcr.io/felix2000jp/clean-architecture-template:${{ github.run_id }}
           min-versions-to-keep: 1
