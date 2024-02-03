@@ -40,6 +40,8 @@ jobs:
           tags: ghcr.io/felix2000jp/clean-architecture-template:${{ github.run_id }}
           push: true
           load: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   run-unit-tests:
     name: Run unit tests
@@ -77,8 +79,9 @@ jobs:
           tags: clean-architecture-template-tests-unit
           push: false
           load: true
-          build-contexts: |
-            builder=docker-image://ghcr.io/felix2000jp/clean-architecture-template:${{ github.run_id }}
+          cache-from: type=gha
+#          build-contexts: |
+#            builder=docker-image://ghcr.io/felix2000jp/clean-architecture-template:${{ github.run_id }}
 
       - name: Run unit tests
         run: |
