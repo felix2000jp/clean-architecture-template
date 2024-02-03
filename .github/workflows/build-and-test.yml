@@ -175,5 +175,5 @@ jobs:
         with:
           package-name: clean-architecture-template
           package-type: container
+          package-version-ids: ${{ github.run_id }}
           min-versions-to-keep: 1
-    
