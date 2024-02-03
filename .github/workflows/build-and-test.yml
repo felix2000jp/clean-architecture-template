@@ -54,6 +54,13 @@ jobs:
         run: |
           docker compose -f docker-compose.yml -f docker-compose.override.yml up tests-integration --abort-on-container-exit
 
+      - name: Docker metadata for final image
+        id: docker_meta
+        uses: docker/metadata-action@v5
+        with:
+          images: felix2000jp/clean-architecture-template
+          flavor: latest=false
+
       - name: Build final image
         uses: docker/build-push-action@v5
         with:
