@@ -163,7 +163,7 @@ jobs:
         with:
           images: ghcr.io/felix2000jp/clean-architecture-template
           flavor: latest=false
-          tags: type=sha
+          tags: type=raw,value={{date 'YYYYMMDD-HHmmss'}}-{{sha}}
         id: docker_meta
 
       - name: Build final image
