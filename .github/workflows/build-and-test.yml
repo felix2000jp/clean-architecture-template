@@ -161,7 +161,7 @@ jobs:
     name: Clean up ghcr
     needs: [ build-final-image ]
     runs-on: ubuntu-latest
-    if: ${{ always() && !cancelled() }}
+    if: ${{ always() }}
 
     permissions:
       packages: write
