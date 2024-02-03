@@ -120,7 +120,6 @@ jobs:
 
     permissions:
       packages: write
-      pull-requests: write
 
     steps:
 
@@ -157,3 +156,21 @@ jobs:
           load: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  clean-up-ghrc:
+    name: Clean up ghrc
+    needs: [ run-unit-tests, run-integration-tests ]
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+
+    steps:
+
+      - name: Clean up ghrc
+        uses: actions/delete-package-versions@v4
+        with:
+          package-name: clean-architecture-template
+          package-type: container
+          min-versions-to-keep: 0
+    
