@@ -155,6 +155,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set up docker buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Docker metadata for final image
         uses: docker/metadata-action@v5
         with:
