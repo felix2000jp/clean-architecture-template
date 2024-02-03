@@ -86,6 +86,13 @@ jobs:
         run: |
           docker compose -f docker-compose.yml -f docker-compose.override.yml up tests-unit --abort-on-container-exit
           docker compose down
+      
+      - name: Delete untagged images
+        uses: actions/delete-package-versions@v4
+        with:
+          package-name: ghcr.io/felix2000jp/clean-architecture-template:${{ github.run_id }}
+          package-type: container
+          delete-only-untagged-versions: true
 
   run-integration-tests:
     name: Run integration tests
