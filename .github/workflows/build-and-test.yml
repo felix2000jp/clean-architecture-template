@@ -73,11 +73,12 @@ jobs:
       - name: Build unit tests
         uses: docker/build-push-action@v5
         with:
-          build-contexts: builder=ghcr.io/felix2000jp/clean-architecture-template:${{ github.run_id }}
           target: tests-unit
           tags: clean-architecture-template-tests-unit
           push: false
           load: true
+          build-contexts: |
+            builder=docker-image://ghcr.io/felix2000jp/clean-architecture-template:${{ github.run_id }}
 
       - name: Run unit tests
         run: |
