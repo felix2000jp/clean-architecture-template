@@ -58,15 +58,29 @@ jobs:
       - name: Docker build testing image
         uses: docker/build-push-action@v5
         with:
-          target: tests
+          target: build
           push: false
           load: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+
+      - name: Docker build unit tests
+        uses: docker/build-push-action@v5
+        with:
+          target: tests-unit
+          tags: clean-architecture-template-tests-unit
+          push: false
+          load: true
 
       - name: Run unit tests
         run: |
           docker compose -f docker-compose.yml -f docker-compose.override.yml up tests-unit --abort-on-container-exit
+
+      - name: Docker build integration tests
+        uses: docker/build-push-action@v5
+        with:
+          target: tests-integration
+          tags: clean-architecture-template-tests-integration
+          push: false
+          load: true
 
       - name: Run integration tests
         run: |
