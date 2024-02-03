@@ -71,7 +71,7 @@ jobs:
           push: false
           load: true
           build-contexts: |
-            builder=docker-image://ghcr.io/felix2000jp/clean-architecture-template:${{ github.run_id }}
+            builder=docker-image://ghcr.io/felix2000jp/clean-architecture-template:${{ env.COMMIT_SHA }}
 
       - name: Run unit tests
         run: |
@@ -109,7 +109,7 @@ jobs:
           push: false
           load: true
           build-contexts: |
-            builder=docker-image://ghcr.io/felix2000jp/clean-architecture-template:${{ github.run_id }}
+            builder=docker-image://ghcr.io/felix2000jp/clean-architecture-template:${{ env.COMMIT_SHA }}
 
       - name: Run integration tests
         run: |
