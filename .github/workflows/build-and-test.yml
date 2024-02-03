@@ -38,7 +38,6 @@ jobs:
         with:
           target: builder
           push: true
-          tags: ghcr.io/felix2000jp/clean-architecture-template:${{ github.run_id }}
 
   run-unit-tests:
     name: Run unit tests
@@ -80,7 +79,7 @@ jobs:
       - name: Run unit tests
         run: |
           docker compose -f docker-compose.yml -f docker-compose.override.yml up tests-unit --abort-on-container-exit
-  
+
 
 #  build-image:
 #    name: Build image
