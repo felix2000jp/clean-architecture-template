@@ -6,7 +6,7 @@ on:
 
 jobs:
   pr-lint:
-    name: PR Lint
+    name: PR lint
     runs-on: ubuntu-latest
     
     steps:
