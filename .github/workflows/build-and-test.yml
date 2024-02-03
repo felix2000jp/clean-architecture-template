@@ -16,7 +16,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: felix2000jp/clean-architecture-template
 
       - name: Set up docker buildx
         uses: docker/setup-buildx-action@v3
