@@ -2,9 +2,9 @@ name: Build and Test
 
 on:
   push:
-    branches: main
+    branches: [ main ]
   pull_request:
-    branches: main
+    branches: [ main ]
 
 env:
   COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -34,7 +34,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           target: builder
-          tags: ghcr.io/felix2000jp/clean-architecture-template:${{ env.COMMIT_SHA }}
+          tags: ghcr.io/felix2000jp/clean-architecture-template:${{ env.COMMIT_SHA }}-${{ github.run_id }}
           push: true
           load: false
           cache-from: type=gha
@@ -70,8 +70,7 @@ jobs:
           tags: clean-architecture-template-tests-unit
           push: false
           load: true
-          build-contexts: |
-            builder=docker-image://ghcr.io/felix2000jp/clean-architecture-template:${{ env.COMMIT_SHA }}
+          build-contexts: builder=docker-image://ghcr.io/felix2000jp/clean-architecture-template:${{ env.COMMIT_SHA }}-${{ github.run_id }}
 
       - name: Run unit tests
         run: |
@@ -108,8 +107,7 @@ jobs:
           tags: clean-architecture-template-tests-integration
           push: false
           load: true
-          build-contexts: |
-            builder=docker-image://ghcr.io/felix2000jp/clean-architecture-template:${{ env.COMMIT_SHA }}
+          build-contexts: builder=docker-image://ghcr.io/felix2000jp/clean-architecture-template:${{ env.COMMIT_SHA }}-${{ github.run_id }}
 
       - name: Run integration tests
         run: |
@@ -140,7 +138,7 @@ jobs:
         with:
           images: felix2000jp/clean-architecture-template
           flavor: latest=false
-          tags: type=raw,value=${{ env.COMMIT_SHA }}
+          tags: type=raw,value=${{ env.COMMIT_SHA }}-{{date 'YYYYMMDD:hhmmss' }}
         id: docker_meta
 
       - name: Build final image
@@ -164,9 +162,9 @@ jobs:
 
     steps:
 
-      # In GHRC I keep the builders images built
+      # In GHCR I keep the builders images built
       # On Docker Hub I keep the final images built
-      - name: Clean up ghrc
+      - name: Clean up ghcr
         uses: actions/delete-package-versions@v4
         with:
           package-name: clean-architecture-template
