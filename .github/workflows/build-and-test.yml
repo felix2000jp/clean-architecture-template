@@ -138,7 +138,7 @@ jobs:
         with:
           images: felix2000jp/clean-architecture-template
           flavor: latest=false
-          tags: type=raw,value=${{ env.COMMIT_SHA }}-{{date 'YYYYMMDD:hhmmss' }}
+          tags: type=raw,value=${{ env.COMMIT_SHA }}-{{date 'YYYYMMDD-hhmmss' }}
         id: docker_meta
 
       - name: Build final image
@@ -148,8 +148,6 @@ jobs:
           labels: ${{ steps.docker_meta.outputs.labels }}
           push: true
           load: false
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
   clean-up-ghcr:
     name: Clean up ghcr
