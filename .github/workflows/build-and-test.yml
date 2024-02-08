@@ -17,6 +17,7 @@ jobs:
 
     permissions:
       packages: write
+      security-events: write
 
     steps:
 
@@ -29,6 +30,14 @@ jobs:
 
       - name: Set up docker buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: Checkout git repo
+        uses: actions/checkout@v4
+
+      - name: Annotate
+        uses: JetBrains/ReSharper-InspectCode@v0.3
+        with:
+          solution: ./clean-architecture-template.sln
 
       - name: Build builder image
         uses: docker/build-push-action@v5
