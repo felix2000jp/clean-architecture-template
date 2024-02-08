@@ -35,9 +35,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Annotate
-        uses: JetBrains/ReSharper-InspectCode@v0.3
+        uses: JetBrains/ReSharper-InspectCode@main
         with:
-          solution: ./clean-architecture-template.sln
+          solution: clean-architecture-template.sln
 
       - name: Build builder image
         uses: docker/build-push-action@v5
