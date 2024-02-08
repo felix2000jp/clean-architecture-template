@@ -29,7 +29,7 @@ jobs:
 
     - name: Inspect code with ReSharper
       shell: bash
-      run: jb inspectcode clean-architecture-template --format=Sarif --output=results.sarif.json
+      run: jb inspectcode ./clean-architecture-template --build --format=Sarif --output=results.sarif.json
 
     - name: Upload SARIF file
       uses: github/codeql-action/upload-sarif@v3
