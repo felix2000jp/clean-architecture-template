@@ -11,35 +11,8 @@ env:
 
 jobs:
 
-  inspect-code:
-    name: Inspect code
-    runs-on: ubuntu-latest
-
-    steps:
-
-    - name: Checkout git repo
-      uses: actions/checkout@v4
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3.0.3
-    
-    - name: Install ReSharper command line tools
-      shell: bash
-      run: dotnet tool install JetBrains.ReSharper.GlobalTools --global
-
-    - name: Inspect code with ReSharper
-      shell: bash
-      run: jb inspectcode clean-architecture-template.sln --build --format=Sarif --output=results.sarif.json
-
-    - name: Upload SARIF file
-      uses: github/codeql-action/upload-sarif@v3
-      with:
-        sarif_file: results.sarif.json
-        category: resharper-inspectcode
-
   build-builder-image:
     name: Build builder image
-    needs: [ inspect-code ]
     runs-on: ubuntu-latest
 
     permissions:
