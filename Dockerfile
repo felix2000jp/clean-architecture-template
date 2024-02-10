@@ -1,6 +1,7 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 
+
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS builder
 WORKDIR /src
 COPY ["src/api/", "api/"]
@@ -16,7 +17,6 @@ COPY ["tests/integration/", "integration/"]
 WORKDIR /
 COPY ["clean-architecture-template.sln", "."]
 RUN dotnet tool install JetBrains.ReSharper.GlobalTools --global
-RUN /root/.dotnet/tools/jb cleanupcode clean-architecture-template.sln
 RUN /root/.dotnet/tools/jb inspectcode clean-architecture-template.sln --build --output=codeinspection.xml --verbosity=WARN --severity=WARNING && if grep "<Issue TypeId" codeinspection.xml; then echo "Fix the above warnings 1" && exit 1; fi
 
 
