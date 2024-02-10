@@ -1,6 +1,5 @@
 using AutoFixture;
 using core.Notes;
-using core.Results;
 using FluentAssertions;
 using NSubstitute;
 using service.Notes.Queries;

@@ -1,7 +1,6 @@
 using api.Extensions;
 using api.Notes.Dtos;
 using AutoMapper;
-using core.Notes;
 using MediatR;
 using service.Notes.Commands;
 using service.Notes.Queries;

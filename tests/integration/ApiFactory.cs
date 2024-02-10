@@ -1,4 +1,3 @@
-using DotNet.Testcontainers.Builders;
 using infra.Context;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
