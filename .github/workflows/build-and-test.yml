@@ -112,7 +112,7 @@ jobs:
 
       - name: Run integration tests
         run: |
-          docker compose -f docker-compose.yml up tests-integration --abort-on-container-exit
+          docker compose up tests-integration --abort-on-container-exit
           docker compose down
 
   build-final-image:
