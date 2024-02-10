@@ -2,5 +2,3 @@ services:
   tests-integration:
     environment:
       TESTCONTAINERS_HOST_OVERRIDE: host.docker.internal
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
