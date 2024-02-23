@@ -8,8 +8,6 @@ COPY ["src/api/", "api/"]
 COPY ["src/service/", "service/"]
 COPY ["src/core/", "core/"]
 COPY ["src/infra/", "infra/"]
-RUN dotnet build "api/api.csproj"
-
 WORKDIR /tests
 COPY ["tests/unit/", "unit/"]
 COPY ["tests/integration/", "integration/"]
@@ -17,7 +15,8 @@ COPY ["tests/integration/", "integration/"]
 WORKDIR /
 COPY ["clean-architecture-template.sln", "."]
 RUN dotnet tool install JetBrains.ReSharper.GlobalTools --global
-RUN /root/.dotnet/tools/jb inspectcode clean-architecture-template.sln --build --output=codeinspection.xml --verbosity=WARN --severity=WARNING && if grep "<Issue TypeId" codeinspection.xml; then echo "Fix the above warnings 1" && exit 1; fi
+RUN /root/.dotnet/tools/jb inspectcode clean-architecture-template.sln --build --output=inspectcode.xml --verbosity=WARN --severity=WARNING && if grep "<Issue TypeId" inspectcode.xml; then echo "Fix the above warnings" && exit 1; fi
+RUN dotnet build "src/api/api.csproj"
 
 
 FROM builder AS tests-unit
