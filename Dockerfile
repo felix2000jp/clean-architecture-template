@@ -11,7 +11,6 @@ COPY ["src/infra/", "infra/"]
 WORKDIR /tests
 COPY ["tests/unit/", "unit/"]
 COPY ["tests/integration/", "integration/"]
-
 WORKDIR /
 COPY ["clean-architecture-template.sln", "."]
 RUN dotnet tool install JetBrains.ReSharper.GlobalTools --global
