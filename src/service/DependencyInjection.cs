@@ -11,6 +11,8 @@ public static class DependencyInjection
     public static void AddServiceLayer(this IServiceCollection services)
     {
         var assembly = typeof(DependencyInjection).Assembly;
+        
+        services.AddScoped<INoteService, NoteService>();
 
         services.AddValidatorsFromAssembly(assembly);
         services.AddMediatR(config =>
@@ -19,7 +21,5 @@ public static class DependencyInjection
             config.AddOpenBehavior(typeof(ValidationBehaviour<,>));
             config.AddOpenBehavior(typeof(LoggingBehaviour<,>));
         });
-
-        services.AddScoped<INoteService, NoteService>();
     }
 }
