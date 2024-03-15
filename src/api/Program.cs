@@ -23,10 +23,10 @@ var app = builder.Build();
     app.UseSerilogRequestLogging();
     app.UseMiddleware<ExceptionMiddleware>();
 
-    app.InjectNoteRoutes();
-
     app.UseSwagger();
     app.UseSwaggerUI(options => options.DefaultModelsExpandDepth(-1));
+
+    app.MapNoteRoutes();
 
     app.UseHttpsRedirection();
     app.Run();

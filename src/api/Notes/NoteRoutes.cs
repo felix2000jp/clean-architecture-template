@@ -9,41 +9,49 @@ namespace api.Notes;
 
 public static class NoteRoutes
 {
-    public static void InjectNoteRoutes(this IEndpointRouteBuilder builder)
+    public static void MapNoteRoutes(this IEndpointRouteBuilder builder)
     {
-        var group = builder.MapGroup("api/notes")
-            .WithTags("Notes")
-            .WithOpenApi();
+        var group = builder.MapGroup("api/notes").WithTags("Notes").WithOpenApi();
 
-        group.MapGet("", GetNotes)
+        group
+            .MapGet("", GetNotes)
             .Produces<IEnumerable<NoteDto>>()
-            .WithName("GetNotes");
+            .Produces(500)
+            .WithName(nameof(GetNotes));
         
-        group.MapGet("{id:guid}", GetNoteById)
+        group
+            .MapGet("{id:guid}", GetNoteById)
             .Produces<NoteDto>()
             .Produces(404)
-            .WithName("GetNoteById");
+            .Produces(500)
+            .WithName(nameof(GetNoteById));
 
-        group.MapPost("", CreateNote)
+        group
+            .MapPost("", CreateNote)
             .Accepts<CreateNoteDto>("application/json")
             .Produces(201)
             .Produces(400)
             .Produces(409)
-            .WithName("CreateNote");
+            .Produces(500)
+            .WithName(nameof(CreateNote));
 
-        group.MapDelete("{id:guid}", DeleteNote)
+        group
+            .MapDelete("{id:guid}", DeleteNote)
             .Produces(204)
             .Produces(400)
             .Produces(404)
-            .WithName("DeleteNote");
+            .Produces(500)
+            .WithName(nameof(DeleteNote));
 
-        group.MapPut("{id:guid}", UpdateNote)
+        group
+            .MapPut("{id:guid}", UpdateNote)
             .Accepts<UpdateNoteDto>("application/json")
             .Produces(204)
             .Produces(400)
             .Produces(404)
             .Produces(409)
-            .WithName("UpdateNote");
+            .Produces(500)
+            .WithName(nameof(UpdateNote));
     }
 
     private static async Task<IResult> GetNotes(
