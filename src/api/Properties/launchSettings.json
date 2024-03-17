@@ -8,7 +8,8 @@
       "applicationUrl": "https://localhost:5000;http://localhost:6000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ConnectionStrings__Default": "Host=localhost; Port=5432; Database=notes-db; Username=root; Password=1234",
+        "ConnectionStrings__Database": "Host=localhost; Port=5432; Database=notes-db; Username=root; Password=1234",
+        "ConnectionStrings__Cache": "localhost:6379",
         "Serilog__Using__0": "Serilog.Sinks.Console",
         "Serilog__WriteTo__0__Name": "Console",
         "Serilog__MinimumLevel__Default": "Information",

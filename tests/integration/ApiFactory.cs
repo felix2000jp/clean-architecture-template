@@ -2,8 +2,11 @@ using infra.Context;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Testcontainers.PostgreSql;
+using Testcontainers.Redis;
 using Xunit;
 
 namespace integration;
@@ -17,24 +20,34 @@ public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         .WithPassword("1234")
         .Build();
 
+    private readonly RedisContainer _cacheContainer = new RedisBuilder()
+        .WithImage("redis")
+        .Build();
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        var connectionString = _databaseContainer.GetConnectionString();
+        var databaseConnectionString = _databaseContainer.GetConnectionString();
+        var cacheConnectionString = _cacheContainer.GetConnectionString();
 
         builder.ConfigureServices(services =>
         {
-            var descriptor = services.SingleOrDefault(x => x.ServiceType == typeof(DbContextOptions<DataContext>));
-
-            if (descriptor is not null)
-            {
-                services.Remove(descriptor);
-            }
-
-            services.AddDbContext<DataContext>(options => options.UseNpgsql(connectionString));
+            services.RemoveAll(typeof(DbContextOptions<DataContext>));
+            services.RemoveAll(typeof(IDistributedCache));
+            
+            services.AddDbContext<DataContext>(options => options.UseNpgsql(databaseConnectionString));
+            services.AddStackExchangeRedisCache(options => options.Configuration = cacheConnectionString);
         });
     }
 
-    public async Task InitializeAsync() => await _databaseContainer.StartAsync();
+    public async Task InitializeAsync()
+    {
+        await _databaseContainer.StartAsync();
+        await _cacheContainer.StartAsync();
+    }
 
-    public new async Task DisposeAsync() => await _databaseContainer.DisposeAsync().AsTask();
+    public new async Task DisposeAsync()
+    {
+        await _databaseContainer.DisposeAsync();
+        await _cacheContainer.DisposeAsync();
+    }
 }
