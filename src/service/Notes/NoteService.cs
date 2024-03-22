@@ -90,6 +90,8 @@ public class NoteService(ILogger logger, IUnitOfWork unitOfWork, INoteRepository
 
         note.Title = title;
         note.Description = description;
+
+        _noteRepository.UpdateNote(note);
         await _unitOfWork.CommitChanges();
 
         _logger.Information("Updated note [{@note}]", note);

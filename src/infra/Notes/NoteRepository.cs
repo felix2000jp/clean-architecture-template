@@ -28,6 +28,11 @@ public class NoteRepository(DataContext dataContext) : INoteRepository
     {
         _dataContext.Notes.Add(note);
     }
+    
+    public void UpdateNote(Note note)
+    {
+        _dataContext.Notes.Update(note);
+    }
 
     public void DeleteNote(Note note)
     {

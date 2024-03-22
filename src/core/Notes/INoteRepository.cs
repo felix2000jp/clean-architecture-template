@@ -10,5 +10,7 @@ public interface INoteRepository
 
     void CreateNote(Note note);
 
+    void UpdateNote(Note note);
+
     void DeleteNote(Note note);
 }
