@@ -26,7 +26,7 @@ public readonly record struct Result : IResult
     public static implicit operator Result(ResultError error) => new(true, error: error);
 }
 
-public readonly record struct Result<TValue> : IResult
+public readonly record struct Result<TValue> : IResult<TValue>
 {
     private readonly TValue? _value;
     private readonly ResultError? _error;
