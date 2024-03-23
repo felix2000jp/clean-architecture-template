@@ -12,8 +12,10 @@ public static class DependencyInjection
 {
     public static void AddInfraLayer(this IServiceCollection services, IConfigurationManager configuration)
     {
-        var connectionString = configuration.GetConnectionString("Default");
-        services.AddDbContext<DataContext>(options => options.UseNpgsql(connectionString));
+        var databaseConnectionString = configuration.GetConnectionString("Database");
+        var cacheConnectionString = configuration.GetConnectionString("Cache");
+        services.AddDbContext<DataContext>(options => options.UseNpgsql(databaseConnectionString));
+        services.AddStackExchangeRedisCache(options => options.Configuration = cacheConnectionString);
 
         services.AddScoped<INoteRepository, NoteRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
