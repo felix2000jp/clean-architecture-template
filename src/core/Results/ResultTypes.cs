@@ -2,7 +2,7 @@ using System.Net;
 
 namespace core.Results;
 
-public struct ResultTypes
+public static class ResultTypes
 {
     public static ResultValue Ok() => new();
 
