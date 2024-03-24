@@ -4,6 +4,10 @@ namespace core.Results;
 
 public static class ResultTypes
 {
+    public static Result<TResultData> ToResult<TResultData>(this TResultData value) => value;
+
+    public static Result<TResultData> ToResult<TResultData>(this ResultError error) => error;
+
     public static ResultValue Ok() => new();
 
     public static ResultError BadRequest(string detail) => new(
