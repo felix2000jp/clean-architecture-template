@@ -4,8 +4,6 @@ namespace core.Results;
 
 public struct ResultTypes
 {
-    public static TValue Ok<TValue>(TValue value) => value;
-
     public static ResultValue Ok() => new();
 
     public static ResultError BadRequest(string detail) => new(

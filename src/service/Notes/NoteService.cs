@@ -16,7 +16,7 @@ public class NoteService(ILogger logger, IUnitOfWork unitOfWork, INoteRepository
         var notes = (await _noteRepository.GetNotes(page, cancellationToken)).ToList();
 
         _logger.Information("Found {numberOfNotes} notes", notes.Count);
-        return ResultTypes.Ok(notes);
+        return notes;
     }
 
     public async Task<Result<Note>> GetNoteById(Guid id, CancellationToken cancellationToken = default)
@@ -29,7 +29,7 @@ public class NoteService(ILogger logger, IUnitOfWork unitOfWork, INoteRepository
         }
 
         _logger.Information("Found Note [{@note}]", note);
-        return ResultTypes.Ok(note);
+        return note;
     }
 
     public async Task<Result> CreateNote(
