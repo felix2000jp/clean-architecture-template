@@ -6,7 +6,7 @@ public interface IResult
     public ResultError Error { get; }
 }
 
-public interface IResult<out TValue> : IResult
+public interface IResult<out TResultData> : IResult
 {
-    public TValue Value { get; }
+    public TResultData Value { get; }
 }
