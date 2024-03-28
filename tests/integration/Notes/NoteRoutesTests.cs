@@ -10,7 +10,7 @@ using Xunit;
 
 namespace integration.Notes;
 
-public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTest(apiFactory)
+public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactory)
 {
     private readonly Fixture _fixture = new();
 
@@ -21,7 +21,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTest(apiFactory
         const int page = 0;
         var notes = _fixture.CreateMany<Note>(20).ToList();
 
-        await DataContext.Notes.AddRangeAsync(notes);
+        DataContext.Notes.AddRange(notes);
         await DataContext.SaveChangesAsync();
 
         // Act
@@ -30,9 +30,8 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTest(apiFactory
         // Assert
         actual.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var expected = DataContext.Notes.Skip(0).Take(20).AsNoTracking();
         var content = await actual.Content.ReadFromJsonAsync<IEnumerable<NoteDto>>();
-        content.Should().BeEquivalentTo(expected);
+        content.Should().BeEquivalentTo(notes);
     }
 
     [Fact]
@@ -42,7 +41,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTest(apiFactory
         const int page = 1;
         var notes = _fixture.CreateMany<Note>(20).ToList();
 
-        await DataContext.Notes.AddRangeAsync(notes);
+        DataContext.Notes.AddRange(notes);
         await DataContext.SaveChangesAsync();
 
         // Act
@@ -179,8 +178,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTest(apiFactory
         // Assert
         actual.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        var updatedNote = DataContext.Notes.AsNoTracking().SingleOrDefault(x => x.Id == note.Id);
-        updatedNote.Should().BeEquivalentTo(updateNoteDto);
+        DataContext.Notes.AsNoTracking().SingleOrDefault(x => x.Id == note.Id).Should().BeEquivalentTo(updateNoteDto);
     }
 
     [Fact]
@@ -199,8 +197,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTest(apiFactory
         // Assert
         actual.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        var updatedNote = DataContext.Notes.AsNoTracking().SingleOrDefault(x => x.Id == note.Id);
-        updatedNote.Should().BeEquivalentTo(updateNoteDto);
+        DataContext.Notes.AsNoTracking().SingleOrDefault(x => x.Id == note.Id).Should().BeEquivalentTo(updateNoteDto);
     }
 
     [Fact]

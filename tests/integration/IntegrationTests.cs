@@ -4,12 +4,12 @@ using Xunit;
 
 namespace integration;
 
-public class IntegrationTest : IClassFixture<ApiFactory>, IAsyncLifetime
+public class IntegrationTests : IClassFixture<ApiFactory>, IAsyncLifetime
 {
     protected readonly HttpClient HttpClient;
     protected readonly DataContext DataContext;
 
-    protected IntegrationTest(ApiFactory apiFactory)
+    protected IntegrationTests(ApiFactory apiFactory)
     {
         var scope = apiFactory.Services.CreateScope();
 
@@ -17,7 +17,13 @@ public class IntegrationTest : IClassFixture<ApiFactory>, IAsyncLifetime
         DataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
     }
 
-    public async Task InitializeAsync() => await DataContext.Database.EnsureCreatedAsync();
+    public async Task InitializeAsync()
+    {
+        await DataContext.Database.EnsureCreatedAsync();
+    }
 
-    public async Task DisposeAsync() => await DataContext.Database.EnsureDeletedAsync();
+    public async Task DisposeAsync()
+    {
+        await DataContext.Database.EnsureDeletedAsync();
+    }
 }
