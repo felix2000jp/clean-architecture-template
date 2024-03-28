@@ -4,7 +4,6 @@ using core.Notes;
 using FluentAssertions;
 using infra;
 using infra.Notes;
-using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace integration.Notes;
@@ -26,7 +25,7 @@ public class NoteRepositoryTests : IntegrationTests
     {
         // Arrange
         const int page = 0;
-        var notes = _fixture.CreateMany<Note>(20);
+        var notes = _fixture.CreateMany<Note>(20).ToList();
 
         DataContext.Notes.AddRange(notes);
         await DataContext.SaveChangesAsync();
@@ -35,8 +34,7 @@ public class NoteRepositoryTests : IntegrationTests
         var actual = await _noteRepository.GetNotes(page);
 
         // Assert
-        var expected = DataContext.Notes.Skip(0).Take(20).AsNoTracking();
-        actual.Should().BeEquivalentTo(expected);
+        actual.Should().BeEquivalentTo(notes);
     }
 
     [Fact]

@@ -24,6 +24,7 @@ public class IntegrationTests : IClassFixture<ApiFactory>, IAsyncLifetime
 
     public async Task DisposeAsync()
     {
+        DataContext.ChangeTracker.Clear();
         await DataContext.Database.EnsureDeletedAsync();
     }
 }
