@@ -16,16 +16,16 @@ public class LoggingBehaviour<TRequest, TResponse>(ILogger logger)
         RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
-        _logger.Information("Starting {request}", typeof(TRequest).Name);
+        _logger.Information("Starting [{request}]", typeof(TRequest).Name);
 
         var result = await next();
 
         if (result.IsError)
         {
-            _logger.Error("Occurred error [{@error}]", result.Error);
+            _logger.Warning("Occurred error [{@error}]", result.Error);
         }
 
-        _logger.Information("Finished {request}", typeof(TRequest).Name);
+        _logger.Information("Finished [{request}]", typeof(TRequest).Name);
 
         return result;
     }

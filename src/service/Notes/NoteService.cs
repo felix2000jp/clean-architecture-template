@@ -15,7 +15,7 @@ public class NoteService(ILogger logger, IUnitOfWork unitOfWork, INoteRepository
     {
         var notes = (await _noteRepository.GetNotes(page, cancellationToken)).ToList();
 
-        _logger.Information("Found {numberOfNotes} notes at page {oage}", notes.Count, page);
+        _logger.Information("Found [{numberOfNotes}] notes at page [{page}]", notes.Count, page);
         return notes;
     }
 
@@ -65,7 +65,7 @@ public class NoteService(ILogger logger, IUnitOfWork unitOfWork, INoteRepository
         _noteRepository.DeleteNote(note);
         await _unitOfWork.CommitChanges();
 
-        _logger.Information("Deleted note [{note}]", note);
+        _logger.Information("Deleted note [{@note}]", note);
         return ResultTypes.Ok();
     }
 
