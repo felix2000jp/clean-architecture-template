@@ -103,7 +103,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactor
         // Assert
         actual.StatusCode.Should().Be(HttpStatusCode.Created);
 
-        DataContext.Notes.SingleOrDefault(x => x.Title == createNoteDto.Title).Should().NotBeNull();
+        DataContext.Notes.AsNoTracking().SingleOrDefault(x => x.Title == createNoteDto.Title).Should().NotBeNull();
     }
 
     [Fact]
@@ -142,7 +142,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactor
         // Assert
         actual.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        DataContext.Notes.SingleOrDefault(x => x.Id == note.Id).Should().BeNull();
+        DataContext.Notes.AsNoTracking().SingleOrDefault(x => x.Id == note.Id).Should().BeNull();
     }
 
     [Fact]
@@ -178,8 +178,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactor
         // Assert
         actual.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        var updatedNote = DataContext.Notes.SingleOrDefault(x => x.Id == note.Id);
-        updatedNote.Should().BeEquivalentTo(updateNoteDto);
+        DataContext.Notes.AsNoTracking().SingleOrDefault(x => x.Id == note.Id).Should().BeEquivalentTo(updateNoteDto);
     }
 
     [Fact]
@@ -198,8 +197,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactor
         // Assert
         actual.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        var updatedNote = DataContext.Notes.SingleOrDefault(x => x.Id == note.Id);
-        updatedNote.Should().BeEquivalentTo(updateNoteDto);
+        DataContext.Notes.AsNoTracking().SingleOrDefault(x => x.Id == note.Id).Should().BeEquivalentTo(updateNoteDto);
     }
 
     [Fact]
