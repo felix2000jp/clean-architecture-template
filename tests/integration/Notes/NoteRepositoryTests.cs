@@ -9,7 +9,7 @@ using Xunit;
 
 namespace integration.Notes;
 
-public class NoteRepositoryTests : IntegrationTest
+public class NoteRepositoryTests : IntegrationTests
 {
     private readonly Fixture _fixture = new();
     private readonly IUnitOfWork _unitOfWork;

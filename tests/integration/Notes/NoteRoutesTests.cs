@@ -10,7 +10,7 @@ using Xunit;
 
 namespace integration.Notes;
 
-public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTest(apiFactory)
+public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactory)
 {
     private readonly Fixture _fixture = new();
 
