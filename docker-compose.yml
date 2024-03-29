@@ -28,6 +28,8 @@ services:
       Serilog__WriteTo__0__Name: "Seq"
       Serilog__WriteTo__0__Args__ServerUrl: "http://seq:5341"
       Serilog__Enrich__0: "FromLogContext"
+      Serilog__Enrich__1: "WithMachineName"
+      Serilog__Enrich__2: "WithThreadId"
     ports:
       - 8080:80
     depends_on:
