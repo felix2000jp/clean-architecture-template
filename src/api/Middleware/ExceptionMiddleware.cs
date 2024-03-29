@@ -17,11 +17,6 @@ public class ExceptionMiddleware(ILogger logger, RequestDelegate next)
         }
         catch (Exception exception)
         {
-            _logger.Error(
-                exception,
-                "An unexpected server error occurred: [{message}]",
-                exception.Message);
-
             var apiError = ResultTypes.UnexpectedError();
 
             var problemDetails = new ProblemDetails
@@ -32,6 +27,8 @@ public class ExceptionMiddleware(ILogger logger, RequestDelegate next)
                 Status = (int)apiError.Status,
                 Extensions = new Dictionary<string, object?> { { "validationErrors", apiError.ValidationErrors } }
             };
+
+            _logger.Error(exception, "An error occurred: {message}", exception.Message);
 
             context.Response.StatusCode = (int)problemDetails.Status;
             await context.Response.WriteAsJsonAsync(problemDetails);
