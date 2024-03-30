@@ -6,10 +6,11 @@ using service;
 
 var builder = WebApplication.CreateBuilder(args);
 {
+    builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
+
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
-    builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
     builder.Services.AddAutoMapper(typeof(Program));
 
     builder.Services.AddInfraLayer(builder.Configuration);
