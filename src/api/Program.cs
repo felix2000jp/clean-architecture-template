@@ -23,7 +23,7 @@ var app = builder.Build();
 
     app.UseHttpsRedirection();
     app.UseSerilogRequestLogging();
-
+    app.UseMiddleware<LoggerCorrelationMiddleware>();
     app.UseMiddleware<ExceptionMiddleware>();
 
     app.UseSwagger();
