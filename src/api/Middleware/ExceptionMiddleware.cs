@@ -22,7 +22,7 @@ public class ExceptionMiddleware(RequestDelegate next, ILogger logger)
                 .ForContext("errorResult", errorResult, true)
                 .Warning("An error occurred: {errorMessage}", errorResult.GetMessage());
 
-            _logger.Error(exception, "{exceptionMessage}", exception.Message);
+            _logger.Error(exception, "An exception occurred: {exceptionMessage}", exception.Message);
 
             var problemDetails = new ProblemDetails
             {

@@ -1,3 +1,4 @@
+using api.Configuration;
 using Serilog.Context;
 
 namespace api.Middleware;
@@ -5,14 +6,15 @@ namespace api.Middleware;
 public class LoggerCorrelationMiddleware(RequestDelegate next)
 {
     private readonly RequestDelegate _next = next;
-    private const string CorrelationIdHeader = "X-Correlation-Id";
 
     public async Task InvokeAsync(HttpContext context)
     {
-        context.Request.Headers.TryGetValue(CorrelationIdHeader, out var correlationIdHeaderValue);
+        context.Request.Headers.TryGetValue(HeaderNames.CorrelationId, out var correlationIdHeaderValue);
         var correlationId = correlationIdHeaderValue.FirstOrDefault() ?? Guid.NewGuid().ToString();
 
-        using (LogContext.PushProperty("correlationId", correlationId))
+        context.Response.Headers[HeaderNames.CorrelationId] = correlationId;
+
+        using (LogContext.PushProperty(HeaderNames.CorrelationId, correlationId))
         {
             await _next(context);
         }
