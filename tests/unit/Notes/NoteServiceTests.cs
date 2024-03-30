@@ -3,9 +3,9 @@ using core;
 using core.Notes;
 using core.Results;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
+using Serilog;
 using service.Notes;
 using Xunit;
 
@@ -20,10 +20,7 @@ public class NoteServiceTests
 
     public NoteServiceTests()
     {
-        _noteService = new NoteService(
-            Substitute.For<ILogger<INoteRepository>>(),
-            _unitOfWorkMock,
-            _noteRepositoryMock);
+        _noteService = new NoteService(Substitute.For<ILogger>(), _unitOfWorkMock, _noteRepositoryMock);
     }
 
     [Fact]
@@ -213,7 +210,7 @@ public class NoteServiceTests
         var note = _fixture.Create<Note>();
         var noteWithTitle = _fixture.Build<Note>().With(x => x.Title, note.Title).Create();
         var error = ResultTypes.Conflict($"Note with title {noteWithTitle.Title
-            } already exists");
+        } already exists");
 
         _noteRepositoryMock.GetNoteById(Arg.Any<Guid>()).Returns(note);
         _noteRepositoryMock.GetNoteByTitle(Arg.Any<string>()).Returns(noteWithTitle);

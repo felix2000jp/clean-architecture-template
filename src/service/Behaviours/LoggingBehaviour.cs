@@ -1,32 +1,34 @@
 using core.Results;
 using MediatR;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace service.Behaviours;
 
-public class LoggingBehaviour<TRequest, TResponse>(ILogger<LoggingBehaviour<TRequest, TResponse>> logger)
+public class LoggingBehaviour<TRequest, TResponse>(ILogger logger)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
     where TResponse : IResult
 {
-    private readonly ILogger<LoggingBehaviour<TRequest, TResponse>> _logger = logger;
+    private readonly ILogger _logger = logger;
 
     public async Task<TResponse> Handle(
         TRequest request,
         RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Starting {requestPipeline}", typeof(TRequest).Name);
+        _logger.Information("Starting {requestPipeline}", typeof(TRequest).Name);
 
         var result = await next();
 
         if (result.IsError)
         {
-            var apiError = result.Error;
-            _logger.LogWarning("An error occurred: {errorMessage} {@apiError}", apiError.GetMessage(), apiError);
+            var errorResult = result.Error;
+            _logger
+                .ForContext("errorResult", errorResult, true)
+                .Warning("An error occurred: {errorMessage}", errorResult.GetMessage());
         }
 
-        _logger.LogInformation("Finished {requestPipeline}", typeof(TRequest).Name);
+        _logger.Information("Finished {requestPipeline}", typeof(TRequest).Name);
 
         return result;
     }
