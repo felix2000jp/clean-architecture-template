@@ -25,7 +25,7 @@ services:
       Serilog__Using__0: "Serilog.Sinks.Seq"
       Serilog__MinimumLevel__Default: "Information"
       Serilog__MinimumLevel__Override__Microsoft: "Information"
-      Serilog__MinimumLevel__Override__Microsoft.AspNetCore: "Information"
+      Serilog__MinimumLevel__Override__Microsoft.AspNetCore: "Warning"
       Serilog__WriteTo__0__Name: "Seq"
       Serilog__WriteTo__0__Args__ServerUrl: "http://seq:5341"
       Serilog__Enrich__0: "FromLogContext"

@@ -3,11 +3,11 @@ using core;
 using core.Notes;
 using core.Results;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using service.Notes;
 using Xunit;
-using ILogger = Serilog.ILogger;
 
 namespace unit.Notes;
 
@@ -20,7 +20,10 @@ public class NoteServiceTests
 
     public NoteServiceTests()
     {
-        _noteService = new NoteService(Substitute.For<ILogger>(), _unitOfWorkMock, _noteRepositoryMock);
+        _noteService = new NoteService(
+            Substitute.For<ILogger<INoteRepository>>(),
+            _unitOfWorkMock,
+            _noteRepositoryMock);
     }
 
     [Fact]
@@ -60,13 +63,13 @@ public class NoteServiceTests
     public async Task GetNoteById_NoteIsNull_NotFound()
     {
         // Arrange
-        var id = _fixture.Create<Guid>();
-        var error = ResultTypes.NotFound();
+        var note = _fixture.Create<Note>();
+        var error = ResultTypes.NotFound($"Note with id {note.Id} does not exist");
 
         _noteRepositoryMock.GetNoteById(Arg.Any<Guid>()).ReturnsNull();
 
         // Act
-        var actual = await _noteService.GetNoteById(id);
+        var actual = await _noteService.GetNoteById(note.Id);
 
         // Assert
         actual.IsError.Should().BeTrue();
@@ -97,7 +100,7 @@ public class NoteServiceTests
     {
         // Arrange
         var note = _fixture.Create<Note>();
-        var error = ResultTypes.Conflict();
+        var error = ResultTypes.Conflict($"Note with title {note.Title} already exists");
 
         _noteRepositoryMock.GetNoteByTitle(Arg.Any<string>()).Returns(note);
 
@@ -132,13 +135,13 @@ public class NoteServiceTests
     public async Task DeleteNote_IdDoesNotExist_NotFound()
     {
         // Arrange
-        var id = _fixture.Create<Guid>();
-        var error = ResultTypes.NotFound();
+        var note = _fixture.Create<Note>();
+        var error = ResultTypes.NotFound($"Note with id {note.Id} does not exist");
 
         _noteRepositoryMock.GetNoteById(Arg.Any<Guid>()).ReturnsNull();
 
         // Act
-        var actual = await _noteService.DeleteNote(id);
+        var actual = await _noteService.DeleteNote(note.Id);
 
         // Assert
         actual.IsError.Should().BeTrue();
@@ -190,7 +193,7 @@ public class NoteServiceTests
     {
         // Arrange
         var note = _fixture.Create<Note>();
-        var error = ResultTypes.NotFound();
+        var error = ResultTypes.NotFound($"Note with id {note.Id} does not exist");
 
         _noteRepositoryMock.GetNoteById(Arg.Any<Guid>()).ReturnsNull();
         _noteRepositoryMock.GetNoteByTitle(Arg.Any<string>()).ReturnsNull();
@@ -209,7 +212,8 @@ public class NoteServiceTests
         // Arrange
         var note = _fixture.Create<Note>();
         var noteWithTitle = _fixture.Build<Note>().With(x => x.Title, note.Title).Create();
-        var error = ResultTypes.Conflict();
+        var error = ResultTypes.Conflict($"Note with title {noteWithTitle.Title
+            } already exists");
 
         _noteRepositoryMock.GetNoteById(Arg.Any<Guid>()).Returns(note);
         _noteRepositoryMock.GetNoteByTitle(Arg.Any<string>()).Returns(noteWithTitle);

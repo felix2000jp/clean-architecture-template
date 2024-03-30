@@ -1,13 +1,12 @@
 using core.Results;
 using Microsoft.AspNetCore.Mvc;
-using ILogger = Serilog.ILogger;
 
 namespace api.Middleware;
 
-public class ExceptionMiddleware(ILogger logger, RequestDelegate next)
+public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
 {
-    private readonly ILogger _logger = logger;
     private readonly RequestDelegate _next = next;
+    private readonly ILogger<ExceptionMiddleware> _logger = logger;
 
     public async Task InvokeAsync(HttpContext context)
     {
@@ -17,7 +16,9 @@ public class ExceptionMiddleware(ILogger logger, RequestDelegate next)
         }
         catch (Exception exception)
         {
-            var apiError = ResultTypes.InternalServerError(exception.Message);
+            var apiError = ResultTypes.InternalServerError("Sorry, an error occurred");
+            _logger.LogWarning("An error occurred: {errorMessage} {@apiError}", apiError.GetMessage(), apiError);
+            _logger.LogError(exception, "{exceptionMessage}", exception.Message);
 
             var problemDetails = new ProblemDetails
             {
@@ -27,8 +28,6 @@ public class ExceptionMiddleware(ILogger logger, RequestDelegate next)
                 Status = (int)apiError.Status,
                 Extensions = new Dictionary<string, object?> { { "validationErrors", apiError.ValidationErrors } }
             };
-
-            _logger.Error(exception, exception.Message);
 
             context.Response.StatusCode = (int)problemDetails.Status;
             await context.Response.WriteAsJsonAsync(problemDetails);

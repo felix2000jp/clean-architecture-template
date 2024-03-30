@@ -17,4 +17,11 @@ public readonly record struct ResultError(
     HttpStatusCode Status,
     string Title,
     string? Detail = default,
-    Dictionary<string, string[]>? ValidationErrors = default);
+    Dictionary<string, string[]>? ValidationErrors = default)
+{
+    /// <summary>
+    /// Gets a message that describes the error.
+    /// </summary>
+    /// <returns>Returns either the detail (if not null) or the title.</returns>
+    public string GetMessage() => Detail ?? Title;
+};

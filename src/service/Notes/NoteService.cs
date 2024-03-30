@@ -1,13 +1,14 @@
 using core;
 using core.Notes;
 using core.Results;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace service.Notes;
 
-public class NoteService(ILogger logger, IUnitOfWork unitOfWork, INoteRepository noteRepository) : INoteService
+public class NoteService(ILogger<INoteRepository> logger, IUnitOfWork unitOfWork, INoteRepository noteRepository)
+    : INoteService
 {
-    private readonly ILogger _logger = logger;
+    private readonly ILogger<INoteRepository> _logger = logger;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly INoteRepository _noteRepository = noteRepository;
 
@@ -15,7 +16,7 @@ public class NoteService(ILogger logger, IUnitOfWork unitOfWork, INoteRepository
     {
         var notes = (await _noteRepository.GetNotes(page, cancellationToken)).ToList();
 
-        _logger.Information("Found {size} notes at page {page}", notes.Count, page);
+        _logger.LogInformation("Found {size} notes at page {page}", notes.Count, page);
         return notes;
     }
 
@@ -25,11 +26,10 @@ public class NoteService(ILogger logger, IUnitOfWork unitOfWork, INoteRepository
 
         if (note is null)
         {
-            _logger.Warning("Note with Id {id} does not exist", id);
-            return ResultTypes.NotFound();
+            return ResultTypes.NotFound($"Note with id {id} does not exist");
         }
 
-        _logger.Information("Found note with id {noteId}", note.Id);
+        _logger.LogInformation("Found note with id {noteId}", note.Id);
         return note;
     }
 
@@ -42,8 +42,7 @@ public class NoteService(ILogger logger, IUnitOfWork unitOfWork, INoteRepository
 
         if (note is not null)
         {
-            _logger.Warning("Note with title {noteTitle} already exists", note.Title);
-            return ResultTypes.Conflict();
+            return ResultTypes.Conflict($"Note with title {note.Title} already exists");
         }
 
         note = new Note(Guid.NewGuid(), title, description);
@@ -51,7 +50,7 @@ public class NoteService(ILogger logger, IUnitOfWork unitOfWork, INoteRepository
         _noteRepository.CreateNote(note);
         await _unitOfWork.CommitChanges();
 
-        _logger.Information("Created note with id {noteId}", note.Id);
+        _logger.LogInformation("Created note with id {noteId}", note.Id);
         return ResultTypes.Ok();
     }
 
@@ -61,14 +60,13 @@ public class NoteService(ILogger logger, IUnitOfWork unitOfWork, INoteRepository
 
         if (note is null)
         {
-            _logger.Warning("Note with id {noteId} does not exist", id);
-            return ResultTypes.NotFound();
+            return ResultTypes.NotFound($"Note with id {id} does not exist");
         }
 
         _noteRepository.DeleteNote(note);
         await _unitOfWork.CommitChanges();
 
-        _logger.Information("Deleted note with id {noteId}", note.Id);
+        _logger.LogInformation("Deleted note with id {noteId}", note.Id);
         return ResultTypes.Ok();
     }
 
@@ -83,21 +81,19 @@ public class NoteService(ILogger logger, IUnitOfWork unitOfWork, INoteRepository
 
         if (note is null)
         {
-            _logger.Warning("Note with id {noteId} does not exist", id);
-            return ResultTypes.NotFound();
+            return ResultTypes.NotFound($"Note with id {id} does not exist");
         }
 
         if (noteWithTitle is not null && noteWithTitle != note)
         {
-            _logger.Warning("Note with title {noteTitle} already exists", title);
-            return ResultTypes.Conflict();
+            return ResultTypes.Conflict($"Note with title {title} already exists");
         }
 
         note.Title = title;
         note.Description = description;
         await _unitOfWork.CommitChanges();
 
-        _logger.Information("Updated note with {noteId}", note.Id);
+        _logger.LogInformation("Updated note with {noteId}", note.Id);
         return ResultTypes.Ok();
     }
 }
