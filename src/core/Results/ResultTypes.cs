@@ -33,14 +33,32 @@ public static class ResultTypes
 
     /// <summary>
     /// Creates an <see cref="ResultError"/> of type <see cref="HttpStatusCode.BadRequest"/>
+    /// in the problem details format.
+    /// </summary>
+    /// <returns>Returns a <see cref="ResultError"/>.</returns>
+    public static ResultError BadRequest() => new(
+        HttpStatusCode.BadRequest,
+        "Bad Request");
+
+    /// <summary>
+    /// Creates an <see cref="ResultError"/> of type <see cref="HttpStatusCode.BadRequest"/>
     /// in the problem details format with a given detail message.
     /// </summary>
     /// <param name="detail">The detail message.</param>
     /// <returns>Returns a <see cref="ResultError"/>.</returns>
     public static ResultError BadRequest(string detail) => new(
+        HttpStatusCode.BadRequest,
         "Bad Request",
-        detail,
-        HttpStatusCode.BadRequest);
+        Detail: detail);
+
+    /// <summary>
+    /// Creates an <see cref="ResultError"/> of type <see cref="HttpStatusCode.NotFound"/>
+    /// in the problem details format.
+    /// </summary>
+    /// <returns>Returns a <see cref="ResultError"/>.</returns>
+    public static ResultError NotFound() => new(
+        HttpStatusCode.NotFound,
+        "Not Found");
 
     /// <summary>
     /// Creates an <see cref="ResultError"/> of type <see cref="HttpStatusCode.NotFound"/>
@@ -49,9 +67,18 @@ public static class ResultTypes
     /// <param name="detail">The detail message.</param>
     /// <returns>Returns a <see cref="ResultError"/>.</returns>
     public static ResultError NotFound(string detail) => new(
+        HttpStatusCode.NotFound,
         "Not Found",
-        detail,
-        HttpStatusCode.NotFound);
+        Detail: detail);
+
+    /// <summary>
+    /// Creates an <see cref="ResultError"/> of type <see cref="HttpStatusCode.Conflict"/>
+    /// in the problem details format.
+    /// </summary>
+    /// <returns>Returns a <see cref="ResultError"/>.</returns>
+    public static ResultError Conflict() => new(
+        HttpStatusCode.Conflict,
+        "Conflict");
 
     /// <summary>
     /// Creates an <see cref="ResultError"/> of type <see cref="HttpStatusCode.Conflict"/>
@@ -60,9 +87,18 @@ public static class ResultTypes
     /// <param name="detail">The detail message.</param>
     /// <returns>Returns a <see cref="ResultError"/>.</returns>
     public static ResultError Conflict(string detail) => new(
+        HttpStatusCode.Conflict,
         "Conflict",
-        detail,
-        HttpStatusCode.Conflict);
+        Detail: detail);
+
+    /// <summary>
+    /// Creates an <see cref="ResultError"/> of type <see cref="HttpStatusCode.InternalServerError"/>
+    /// in the problem details format.
+    /// </summary>
+    /// <returns>Returns a <see cref="ResultError"/>.</returns>
+    public static ResultError InternalServerError() => new(
+        HttpStatusCode.InternalServerError,
+        "Internal Server Error");
 
     /// <summary>
     /// Creates an <see cref="ResultError"/> of type <see cref="HttpStatusCode.InternalServerError"/>
@@ -71,23 +107,9 @@ public static class ResultTypes
     /// <param name="detail">The detail message.</param>
     /// <returns>Returns a <see cref="ResultError"/>.</returns>
     public static ResultError InternalServerError(string detail) => new(
+        HttpStatusCode.InternalServerError,
         "Internal Server Error",
-        detail,
-        HttpStatusCode.InternalServerError);
-
-    /// <summary>
-    /// Creates an <see cref="ResultError"/> of type <see cref="HttpStatusCode.InternalServerError"/>
-    /// in the problem details format.
-    /// </summary>
-    /// <remarks>
-    /// This is to be used only when an unexpected error occurs during the exception middleware.
-    /// /// Otherwise use <see cref="InternalServerError"/>
-    /// </remarks>
-    /// <returns>Returns a <see cref="ResultError"/>.</returns>
-    public static ResultError UnexpectedError() => new(
-        "Unexpected Error",
-        "An unexpected server error occurred",
-        HttpStatusCode.InternalServerError);
+        Detail: detail);
 
     /// <summary>
     /// Creates an <see cref="ResultError"/> of type <see cref="HttpStatusCode.BadRequest"/>
@@ -95,15 +117,14 @@ public static class ResultTypes
     /// </summary>
     /// <remarks>
     /// This is to be used only when the validation of a request fails on the request validation step.
-    /// Otherwise use <see cref="BadRequest"/>
+    /// Otherwise use <see cref="BadRequest()"/>
     /// </remarks>
     /// <param name="validationErrors">The validation errors.</param>
     /// <returns>Returns a <see cref="ResultError"/>.</returns>
     public static ResultError ValidationError(Dictionary<string, string[]> validationErrors) => new(
-        "Validation Error",
-        "One or more validation errors occurred",
         HttpStatusCode.BadRequest,
-        validationErrors);
+        "Validation Error",
+        ValidationErrors: validationErrors);
 
     /// <summary>
     /// Creates an <see cref="ResultError"/> in the problem details format
@@ -119,8 +140,8 @@ public static class ResultTypes
     /// <param name="validationErrors">the validation errors.</param>
     /// <returns>Returns a <see cref="ResultError"/>.</returns>
     public static ResultError CustomError(
-        string title,
-        string detail,
         HttpStatusCode status,
-        Dictionary<string, string[]>? validationErrors = default) => new(title, detail, status, validationErrors);
+        string title,
+        string? detail = default,
+        Dictionary<string, string[]>? validationErrors = default) => new(status, title, detail, validationErrors);
 }
