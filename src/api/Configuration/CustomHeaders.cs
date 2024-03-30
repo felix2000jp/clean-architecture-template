@@ -1,6 +1,6 @@
 namespace api.Configuration;
 
-public static class HeaderNames
+public static class CustomHeaders
 {
     public static string CorrelationId => "X-Correlation-Id";
 }

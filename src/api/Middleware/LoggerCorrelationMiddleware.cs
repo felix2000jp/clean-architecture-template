@@ -9,12 +9,13 @@ public class LoggerCorrelationMiddleware(RequestDelegate next)
 
     public async Task InvokeAsync(HttpContext context)
     {
-        context.Request.Headers.TryGetValue(HeaderNames.CorrelationId, out var correlationIdHeaderValue);
-        var correlationId = correlationIdHeaderValue.FirstOrDefault() ?? Guid.NewGuid().ToString();
+        context.Request.Headers.TryGetValue(CustomHeaders.CorrelationId, out var headerValue);
+        var correlationId = headerValue.FirstOrDefault() ?? Guid.NewGuid().ToString();
 
-        context.Response.Headers[HeaderNames.CorrelationId] = correlationId;
+        context.Request.Headers[CustomHeaders.CorrelationId] = correlationId;
+        context.Response.Headers[CustomHeaders.CorrelationId] = correlationId;
 
-        using (LogContext.PushProperty(HeaderNames.CorrelationId, correlationId))
+        using (LogContext.PushProperty("correlationId", correlationId))
         {
             await _next(context);
         }

@@ -9,7 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 {
     builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
 
-    builder.Services.AddHeaderPropagation(options => options.Headers.Add(HeaderNames.CorrelationId));
+    builder.Services.AddHttpContextAccessor();
+    builder.Services.AddHeaderPropagation(options => options.Headers.Add(CustomHeaders.CorrelationId));
 
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
@@ -24,12 +25,11 @@ var app = builder.Build();
 {
     app.Services.ApplyMigrations();
 
-    app.UseHttpsRedirection();
-    app.UseHeaderPropagation();
-
-    app.UseSerilogRequestLogging();
     app.UseMiddleware<LoggerCorrelationMiddleware>();
     app.UseMiddleware<ExceptionMiddleware>();
+    app.UseSerilogRequestLogging();
+    app.UseHeaderPropagation();
+    app.UseHttpsRedirection();
 
     app.UseSwagger();
     app.UseSwaggerUI(options => options.DefaultModelsExpandDepth(-1));
