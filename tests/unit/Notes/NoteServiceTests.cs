@@ -61,7 +61,7 @@ public class NoteServiceTests
     {
         // Arrange
         var id = _fixture.Create<Guid>();
-        var error = ResultTypes.NotFound($"Note with Id [{id}] does not exist");
+        var error = ResultTypes.NotFound();
 
         _noteRepositoryMock.GetNoteById(Arg.Any<Guid>()).ReturnsNull();
 
@@ -97,7 +97,7 @@ public class NoteServiceTests
     {
         // Arrange
         var note = _fixture.Create<Note>();
-        var error = ResultTypes.Conflict($"Note with Title [{note.Title}] already exists");
+        var error = ResultTypes.Conflict();
 
         _noteRepositoryMock.GetNoteByTitle(Arg.Any<string>()).Returns(note);
 
@@ -133,7 +133,7 @@ public class NoteServiceTests
     {
         // Arrange
         var id = _fixture.Create<Guid>();
-        var error = ResultTypes.NotFound($"Note with Id [{id}] does not exist");
+        var error = ResultTypes.NotFound();
 
         _noteRepositoryMock.GetNoteById(Arg.Any<Guid>()).ReturnsNull();
 
@@ -190,7 +190,7 @@ public class NoteServiceTests
     {
         // Arrange
         var note = _fixture.Create<Note>();
-        var error = ResultTypes.NotFound($"Note with Id [{note.Id}] does not exist");
+        var error = ResultTypes.NotFound();
 
         _noteRepositoryMock.GetNoteById(Arg.Any<Guid>()).ReturnsNull();
         _noteRepositoryMock.GetNoteByTitle(Arg.Any<string>()).ReturnsNull();
@@ -209,7 +209,7 @@ public class NoteServiceTests
         // Arrange
         var note = _fixture.Create<Note>();
         var noteWithTitle = _fixture.Build<Note>().With(x => x.Title, note.Title).Create();
-        var error = ResultTypes.Conflict($"Note with Title [{note.Title}] already exists");
+        var error = ResultTypes.Conflict();
 
         _noteRepositoryMock.GetNoteById(Arg.Any<Guid>()).Returns(note);
         _noteRepositoryMock.GetNoteByTitle(Arg.Any<string>()).Returns(noteWithTitle);
