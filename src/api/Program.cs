@@ -25,11 +25,11 @@ var app = builder.Build();
 {
     app.Services.ApplyMigrations();
 
+    app.UseHttpsRedirection();
     app.UseMiddleware<LoggerCorrelationMiddleware>();
     app.UseMiddleware<ExceptionMiddleware>();
     app.UseSerilogRequestLogging();
     app.UseHeaderPropagation();
-    app.UseHttpsRedirection();
 
     app.UseSwagger();
     app.UseSwaggerUI(options => options.DefaultModelsExpandDepth(-1));

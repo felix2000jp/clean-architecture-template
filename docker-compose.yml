@@ -29,7 +29,7 @@ services:
       Serilog__WriteTo__0__Name: "Seq"
       Serilog__WriteTo__0__Args__ServerUrl: "http://seq:5341"
       Serilog__Enrich__0: "FromLogContext"
-      Serilog__Properties__ServiceName: "Notes"
+      Serilog__Properties__Application: "CleanArchitectureTemplate"
       Serilog__Properties__Environment: "Development"
     ports:
       - 8080:80
@@ -43,8 +43,8 @@ services:
     environment:
       ACCEPT_EULA: "Y"
     ports:
-      - 5341:5341
       - 8081:80
+      - 5341:5341
 
   database:
     image: postgres
