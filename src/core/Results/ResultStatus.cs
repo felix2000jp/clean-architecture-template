@@ -14,7 +14,14 @@ public readonly record struct ResultValue;
 /// Represents an error.
 /// </summary>
 public readonly record struct ResultError(
-    string Title,
-    string Detail,
     HttpStatusCode Status,
-    Dictionary<string, string[]>? ValidationErrors = default);
+    string Title,
+    string? Detail = default,
+    Dictionary<string, string[]>? ValidationErrors = default)
+{
+    /// <summary>
+    /// Gets a message that describes the error.
+    /// </summary>
+    /// <returns>Returns either the detail (if not null) or the title.</returns>
+    public string GetMessage() => Detail ?? Title;
+};

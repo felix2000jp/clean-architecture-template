@@ -16,16 +16,19 @@ public class LoggingBehaviour<TRequest, TResponse>(ILogger logger)
         RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
-        _logger.Information("Starting [{request}]", typeof(TRequest).Name);
+        _logger.Information("Starting {requestPipeline}", typeof(TRequest).Name);
 
         var result = await next();
 
         if (result.IsError)
         {
-            _logger.Warning("Occurred error [{@error}]", result.Error);
+            var errorResult = result.Error;
+            _logger
+                .ForContext("errorResult", errorResult, true)
+                .Warning("An error occurred: {errorMessage}", errorResult.GetMessage());
         }
 
-        _logger.Information("Finished [{request}]", typeof(TRequest).Name);
+        _logger.Information("Finished {requestPipeline}", typeof(TRequest).Name);
 
         return result;
     }

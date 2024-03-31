@@ -15,7 +15,7 @@ public class NoteService(ILogger logger, IUnitOfWork unitOfWork, INoteRepository
     {
         var notes = (await _noteRepository.GetNotes(page, cancellationToken)).ToList();
 
-        _logger.Information("Found [{numberOfNotes}] notes at page [{page}]", notes.Count, page);
+        _logger.Information("Found {size} notes at page {page}", notes.Count, page);
         return notes;
     }
 
@@ -25,10 +25,10 @@ public class NoteService(ILogger logger, IUnitOfWork unitOfWork, INoteRepository
 
         if (note is null)
         {
-            return ResultTypes.NotFound($"Note with Id [{id}] does not exist");
+            return ResultTypes.NotFound($"Note with id {id} does not exist");
         }
 
-        _logger.Information("Found Note [{@note}]", note);
+        _logger.Information("Found note with id {noteId}", note.Id);
         return note;
     }
 
@@ -41,7 +41,7 @@ public class NoteService(ILogger logger, IUnitOfWork unitOfWork, INoteRepository
 
         if (note is not null)
         {
-            return ResultTypes.Conflict($"Note with Title [{title}] already exists");
+            return ResultTypes.Conflict($"Note with title {note.Title} already exists");
         }
 
         note = new Note(Guid.NewGuid(), title, description);
@@ -49,7 +49,7 @@ public class NoteService(ILogger logger, IUnitOfWork unitOfWork, INoteRepository
         _noteRepository.CreateNote(note);
         await _unitOfWork.CommitChanges();
 
-        _logger.Information("Created note [{@note}]", note);
+        _logger.Information("Created note with id {noteId}", note.Id);
         return ResultTypes.Ok();
     }
 
@@ -59,13 +59,13 @@ public class NoteService(ILogger logger, IUnitOfWork unitOfWork, INoteRepository
 
         if (note is null)
         {
-            return ResultTypes.NotFound($"Note with Id [{id}] does not exist");
+            return ResultTypes.NotFound($"Note with id {id} does not exist");
         }
 
         _noteRepository.DeleteNote(note);
         await _unitOfWork.CommitChanges();
 
-        _logger.Information("Deleted note [{@note}]", note);
+        _logger.Information("Deleted note with id {noteId}", note.Id);
         return ResultTypes.Ok();
     }
 
@@ -80,19 +80,19 @@ public class NoteService(ILogger logger, IUnitOfWork unitOfWork, INoteRepository
 
         if (note is null)
         {
-            return ResultTypes.NotFound($"Note with Id [{id}] does not exist");
+            return ResultTypes.NotFound($"Note with id {id} does not exist");
         }
 
         if (noteWithTitle is not null && noteWithTitle != note)
         {
-            return ResultTypes.Conflict($"Note with Title [{title}] already exists");
+            return ResultTypes.Conflict($"Note with title {title} already exists");
         }
 
         note.Title = title;
         note.Description = description;
         await _unitOfWork.CommitChanges();
 
-        _logger.Information("Updated note [{@note}]", note);
+        _logger.Information("Updated note with {noteId}", note.Id);
         return ResultTypes.Ok();
     }
 }

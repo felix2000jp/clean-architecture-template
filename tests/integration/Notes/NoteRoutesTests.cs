@@ -79,7 +79,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactor
     {
         // Arrange
         var note = _fixture.Create<Note>();
-        var error = ResultTypes.NotFound($"Note with Id [{note.Id}] does not exist");
+        var error = ResultTypes.NotFound($"Note with id {note.Id} does not exist");
 
         // Act
         var actual = await HttpClient.GetAsync($"api/notes/{note.Id}");
@@ -112,7 +112,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactor
         // Arrange
         var note = _fixture.Create<Note>();
         var createNoteDto = _fixture.Build<CreateNoteDto>().With(x => x.Title, note.Title).Create();
-        var error = ResultTypes.Conflict($"Note with Title [{createNoteDto.Title}] already exists");
+        var error = ResultTypes.Conflict($"Note with title {note.Title} already exists");
 
         DataContext.Notes.Add(note);
         await DataContext.SaveChangesAsync();
@@ -150,7 +150,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactor
     {
         // Arrange
         var note = _fixture.Create<Note>();
-        var error = ResultTypes.NotFound($"Note with Id [{note.Id}] does not exist");
+        var error = ResultTypes.NotFound($"Note with id {note.Id} does not exist");
 
         // Act
         var actual = await HttpClient.DeleteAsync($"api/notes/{note.Id}");
@@ -206,7 +206,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactor
         // Arrange
         var note = _fixture.Create<Note>();
         var updateNoteDto = _fixture.Create<UpdateNoteDto>();
-        var error = ResultTypes.NotFound($"Note with Id [{note.Id}] does not exist");
+        var error = ResultTypes.NotFound($"Note with id {note.Id} does not exist");
 
         // Act
         var actual = await HttpClient.PutAsJsonAsync($"api/notes/{note.Id}", updateNoteDto);
@@ -225,7 +225,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactor
         var note = _fixture.Create<Note>();
         var noteWithConflict = _fixture.Create<Note>();
         var updateNoteDto = _fixture.Build<UpdateNoteDto>().With(x => x.Title, noteWithConflict.Title).Create();
-        var error = ResultTypes.Conflict($"Note with Title [{updateNoteDto.Title}] already exists");
+        var error = ResultTypes.Conflict($"Note with title {noteWithConflict.Title} already exists");
 
         DataContext.Notes.Add(note);
         DataContext.Notes.Add(noteWithConflict);
