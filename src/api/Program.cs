@@ -1,5 +1,5 @@
-using api.Configuration;
-using api.Middleware;
+using api.Configurations;
+using api.Middlewares;
 using api.Notes;
 using infra;
 using Serilog;

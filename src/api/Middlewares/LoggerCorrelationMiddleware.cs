@@ -1,7 +1,7 @@
-using api.Configuration;
+using api.Configurations;
 using Serilog.Context;
 
-namespace api.Middleware;
+namespace api.Middlewares;
 
 public class LoggerCorrelationMiddleware(RequestDelegate next)
 {

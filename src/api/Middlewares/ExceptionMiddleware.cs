@@ -2,7 +2,7 @@ using core.Results;
 using Microsoft.AspNetCore.Mvc;
 using ILogger = Serilog.ILogger;
 
-namespace api.Middleware;
+namespace api.Middlewares;
 
 public class ExceptionMiddleware(RequestDelegate next, ILogger logger)
 {
