@@ -11,11 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.AddHttpContextAccessor();
     builder.Services.AddHeaderPropagation(options => options.Headers.Add(CustomHeaders.CorrelationId));
+    builder.Services.AddAutoMapper(typeof(Program));
 
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-
-    builder.Services.AddAutoMapper(typeof(Program));
 
     builder.Services.AddInfraLayer(builder.Configuration);
     builder.Services.AddServiceLayer();
