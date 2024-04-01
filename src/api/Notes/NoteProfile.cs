@@ -1,6 +1,6 @@
-using api.Notes.Dtos;
+using api.Notes.Contracts;
 using AutoMapper;
-using core.Notes;
+using service.Notes;
 
 namespace api.Notes;
 
@@ -8,6 +8,6 @@ public class NoteProfile : Profile
 {
     public NoteProfile()
     {
-        CreateMap<Note, NoteDto>();
+        CreateMap<NoteDto, NoteResponse>();
     }
 }

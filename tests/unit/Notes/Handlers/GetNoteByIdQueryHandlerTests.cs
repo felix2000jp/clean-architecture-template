@@ -1,8 +1,10 @@
 using AutoFixture;
+using AutoMapper;
 using core.Notes;
 using core.Results;
 using FluentAssertions;
 using NSubstitute;
+using service.Notes;
 using service.Notes.Queries;
 using Xunit;
 
@@ -16,7 +18,8 @@ public class GetNoteByIdQueryHandlerTests
 
     public GetNoteByIdQueryHandlerTests()
     {
-        _handler = new GetNoteByIdQueryHandler(_noteService);
+        var mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new NoteProfile())));
+        _handler = new GetNoteByIdQueryHandler(mapper, _noteService);
     }
 
     [Fact]

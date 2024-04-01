@@ -1,3 +1,4 @@
+using AutoMapper;
 using core.Notes;
 using core.Results;
 using FluentValidation;
@@ -5,18 +6,22 @@ using MediatR;
 
 namespace service.Notes.Queries;
 
-public record GetNotesQuery(int Page) : IRequest<Result<IEnumerable<Note>>>;
+public record GetNotesQuery(int Page) : IRequest<Result<IEnumerable<NoteDto>>>;
 
-public sealed class GetNotesQueryHandler(INoteService noteService)
-    : IRequestHandler<GetNotesQuery, Result<IEnumerable<Note>>>
+public sealed class GetNotesQueryHandler(
+    IMapper mapper,
+    INoteService noteService)
+    : IRequestHandler<GetNotesQuery, Result<IEnumerable<NoteDto>>>
 {
+    private readonly IMapper _mapper = mapper;
     private readonly INoteService _noteService = noteService;
 
-    public async Task<Result<IEnumerable<Note>>> Handle(
+    public async Task<Result<IEnumerable<NoteDto>>> Handle(
         GetNotesQuery request,
         CancellationToken cancellationToken = default)
     {
-        return await _noteService.GetNotes(request.Page, cancellationToken);
+        var result = await _noteService.GetNotes(request.Page, cancellationToken);
+        return result.Then(_mapper.Map<IEnumerable<NoteDto>>);
     }
 }
 

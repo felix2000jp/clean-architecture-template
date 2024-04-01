@@ -89,6 +89,17 @@ public readonly record struct Result<TResultData> : IResult<TResultData>
     /// </summary>
     public ResultError Error => _error ?? throw new InvalidOperationException("Error was expected but none were found");
 
+    /// <summary>
+    /// If the state is a value, the provided function <paramref name="onValue"/> is executed and
+    /// its result is returned.
+    /// </summary>
+    /// <typeparam name="TNextValue">The type of the result.</typeparam>
+    /// <param name="onValue">The function to execute if the state is a value.</param>
+    /// <returns>The result from <paramref name="onValue"/> if state is value; else the <see cref="Error"/>.</returns>
+    public Result<TNextValue> Then<TNextValue>(Func<TResultData, TNextValue> onValue)
+    {
+        return IsError ? Error : onValue(Value);
+    }
 
     /// <summary>
     /// Executes the appropriate function based on the state of the <see cref="Result{TResultData}"/>.
