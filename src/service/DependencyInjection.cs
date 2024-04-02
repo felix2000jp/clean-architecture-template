@@ -11,9 +11,10 @@ public static class DependencyInjection
     public static void AddServiceLayer(this IServiceCollection services)
     {
         var assembly = typeof(DependencyInjection).Assembly;
-        
+
         services.AddScoped<INoteService, NoteService>();
 
+        services.AddAutoMapper(typeof(DependencyInjection));
         services.AddValidatorsFromAssembly(assembly);
         services.AddMediatR(config =>
         {

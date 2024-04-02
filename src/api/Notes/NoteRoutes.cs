@@ -1,5 +1,5 @@
 using api.Extensions;
-using api.Notes.Dtos;
+using api.Notes.Contracts;
 using AutoMapper;
 using MediatR;
 using service.Notes.Commands;
@@ -15,20 +15,20 @@ public static class NoteRoutes
 
         group
             .MapGet("", GetNotes)
-            .Produces<IEnumerable<NoteDto>>()
+            .Produces<IEnumerable<NoteResponse>>()
             .Produces(500)
             .WithName(nameof(GetNotes));
-        
+
         group
             .MapGet("{id:guid}", GetNoteById)
-            .Produces<NoteDto>()
+            .Produces<NoteResponse>()
             .Produces(404)
             .Produces(500)
             .WithName(nameof(GetNoteById));
 
         group
             .MapPost("", CreateNote)
-            .Accepts<CreateNoteDto>("application/json")
+            .Accepts<CreateNoteBody>("application/json")
             .Produces(201)
             .Produces(400)
             .Produces(409)
@@ -45,7 +45,7 @@ public static class NoteRoutes
 
         group
             .MapPut("{id:guid}", UpdateNote)
-            .Accepts<UpdateNoteDto>("application/json")
+            .Accepts<CreateNoteBody>("application/json")
             .Produces(204)
             .Produces(400)
             .Produces(404)
@@ -63,7 +63,7 @@ public static class NoteRoutes
         var result = await sender.Send(request);
 
         return result.Match(
-            value => value.ToOk<IEnumerable<NoteDto>>(mapper),
+            value => Results.Ok(mapper.Map<IEnumerable<NoteResponse>>(value)),
             error => error.ToProblemDetails());
     }
 
@@ -76,15 +76,15 @@ public static class NoteRoutes
         var result = await sender.Send(request);
 
         return result.Match(
-            value => value.ToOk<NoteDto>(mapper),
+            value => Results.Ok(mapper.Map<NoteResponse>(value)),
             error => error.ToProblemDetails());
     }
 
     private static async Task<IResult> CreateNote(
         ISender sender,
-        CreateNoteDto dto)
+        CreateNoteBody body)
     {
-        var request = new CreateNoteCommand(dto.Title, dto.Description);
+        var request = new CreateNoteCommand(body.Title, body.Description);
         var result = await sender.Send(request);
 
         return result.Match(
@@ -107,9 +107,9 @@ public static class NoteRoutes
     private static async Task<IResult> UpdateNote(
         ISender sender,
         Guid id,
-        UpdateNoteDto dto)
+        UpdateNoteBody body)
     {
-        var request = new UpdateNoteCommand(id, dto.Title, dto.Description);
+        var request = new UpdateNoteCommand(id, body.Title, body.Description);
         var result = await sender.Send(request);
 
         return result.Match(

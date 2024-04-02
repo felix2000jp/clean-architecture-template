@@ -1,6 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
-using api.Notes.Dtos;
+using api.Notes.Contracts;
 using AutoFixture;
 using core.Notes;
 using core.Results;
@@ -30,7 +30,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactor
         // Assert
         actual.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await actual.Content.ReadFromJsonAsync<IEnumerable<NoteDto>>();
+        var content = await actual.Content.ReadFromJsonAsync<IEnumerable<NoteResponse>>();
         content.Should().BeEquivalentTo(notes);
     }
 
@@ -51,7 +51,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactor
         actual.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var expected = Enumerable.Empty<Note>();
-        var content = await actual.Content.ReadFromJsonAsync<IEnumerable<Note>>();
+        var content = await actual.Content.ReadFromJsonAsync<IEnumerable<NoteResponse>>();
         content.Should().BeEquivalentTo(expected);
     }
 
@@ -70,7 +70,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactor
         // Assert
         actual.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await actual.Content.ReadFromJsonAsync<NoteDto>();
+        var content = await actual.Content.ReadFromJsonAsync<NoteResponse>();
         content.Should().BeEquivalentTo(note);
     }
 
@@ -95,7 +95,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactor
     public async Task CreateNote_TitleIsUnique_Created()
     {
         // Arrange
-        var createNoteDto = _fixture.Create<CreateNoteDto>();
+        var createNoteDto = _fixture.Create<CreateNoteBody>();
 
         // Act
         var actual = await HttpClient.PostAsJsonAsync("api/notes", createNoteDto);
@@ -111,7 +111,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactor
     {
         // Arrange
         var note = _fixture.Create<Note>();
-        var createNoteDto = _fixture.Build<CreateNoteDto>().With(x => x.Title, note.Title).Create();
+        var createNoteDto = _fixture.Build<CreateNoteBody>().With(x => x.Title, note.Title).Create();
         var error = ResultTypes.Conflict($"Note with title {note.Title} already exists");
 
         DataContext.Notes.Add(note);
@@ -167,7 +167,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactor
     {
         // Arrange
         var note = _fixture.Create<Note>();
-        var updateNoteDto = _fixture.Create<UpdateNoteDto>();
+        var updateNoteDto = _fixture.Create<UpdateNoteBody>();
 
         DataContext.Notes.Add(note);
         await DataContext.SaveChangesAsync();
@@ -186,7 +186,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactor
     {
         // Arrange
         var note = _fixture.Create<Note>();
-        var updateNoteDto = _fixture.Build<UpdateNoteDto>().With(x => x.Title, note.Title).Create();
+        var updateNoteDto = _fixture.Build<UpdateNoteBody>().With(x => x.Title, note.Title).Create();
 
         DataContext.Notes.Add(note);
         await DataContext.SaveChangesAsync();
@@ -205,7 +205,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactor
     {
         // Arrange
         var note = _fixture.Create<Note>();
-        var updateNoteDto = _fixture.Create<UpdateNoteDto>();
+        var updateNoteDto = _fixture.Create<UpdateNoteBody>();
         var error = ResultTypes.NotFound($"Note with id {note.Id} does not exist");
 
         // Act
@@ -224,7 +224,7 @@ public class NoteRoutesTests(ApiFactory apiFactory) : IntegrationTests(apiFactor
         // Arrange
         var note = _fixture.Create<Note>();
         var noteWithConflict = _fixture.Create<Note>();
-        var updateNoteDto = _fixture.Build<UpdateNoteDto>().With(x => x.Title, noteWithConflict.Title).Create();
+        var updateNoteDto = _fixture.Build<UpdateNoteBody>().With(x => x.Title, noteWithConflict.Title).Create();
         var error = ResultTypes.Conflict($"Note with title {noteWithConflict.Title} already exists");
 
         DataContext.Notes.Add(note);

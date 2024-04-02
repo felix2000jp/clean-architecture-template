@@ -1,7 +1,9 @@
 using AutoFixture;
+using AutoMapper;
 using core.Notes;
 using FluentAssertions;
 using NSubstitute;
+using service.Notes;
 using service.Notes.Queries;
 using Xunit;
 
@@ -15,7 +17,8 @@ public class GetNotesQueryHandlerTests
 
     public GetNotesQueryHandlerTests()
     {
-        _handler = new GetNotesQueryHandler(_noteService);
+        var mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new NoteProfile())));
+        _handler = new GetNotesQueryHandler(mapper, _noteService);
     }
 
     [Fact]
