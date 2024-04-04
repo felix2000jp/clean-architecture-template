@@ -161,11 +161,16 @@ jobs:
 
     steps:
 
-      # In GHCR I keep the builders images built
-      # On Docker Hub I keep the final images built
-      - name: Clean up ghcr
+      - name: Delete untagged images
         uses: actions/delete-package-versions@v4
         with:
           package-name: clean-architecture-template
           package-type: container
           delete-only-untagged-versions: true
+
+      - name: Delete older images
+        uses: actions/delete-package-versions@v4
+        with:
+          package-name: clean-architecture-template
+          package-type: container
+          min-versions-to-keep: 10
