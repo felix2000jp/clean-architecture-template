@@ -1,0 +1,181 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  PROJECT_NAME: clean-architecture-template
+  COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+
+jobs:
+  run-code-scanning-tools:
+    name: Run code scanning tools
+    runs-on: ubuntu-latest
+    
+    permissions:
+      security-events: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+      - name: Install ReSharper command line tools
+        run: |
+          dotnet tool install JetBrains.ReSharper.GlobalTools --global --version 2024.1
+      - name: Inspect code with ReSharper
+        run: |
+          jb inspectcode ./${{ env.PROJECT_NAME }}.sln \
+          --build --output=inspectcode.sarif --verbosity=WARN --severity=WARNING
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: inspectcode.sarif
+          category: resharper-inspectcode
+      - name: Check for warnings and errors
+        run: |
+          if grep -q '"results": \[\]' inspectcode.sarif; then
+            exit 0
+          else
+            exit 1
+          fi
+
+  build-builder-image:
+    name: Build builder image
+    needs: [ run-code-scanning-tools ]
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+
+    steps:
+      - name: Set up docker buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to ghcr.io registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build builder image
+        uses: docker/build-push-action@v6
+        with:
+          tags: ghcr.io/felix2000jp/${{ env.PROJECT_NAME }}:${{ env.COMMIT_SHA }}
+          target: builder
+          cache-to: type=registry,ref=ghcr.io/felix2000jp/${{ env.PROJECT_NAME }}:${{ env.COMMIT_SHA }}-cache
+          push: true
+          load: false
+
+  run-unit-tests:
+    name: Run unit tests
+    needs: [ build-builder-image ]
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: read
+
+    steps:
+      - name: Checkout git repo
+        uses: actions/checkout@v4
+      - name: Set up docker buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build unit tests
+        uses: docker/build-push-action@v6
+        with:
+          tags: ${{ env.PROJECT_NAME }}-tests-unit
+          target: tests-unit
+          build-contexts: builder=docker-image://ghcr.io/felix2000jp/${{ env.PROJECT_NAME }}:${{ env.COMMIT_SHA }}
+          cache-from: type=registry,ref=ghcr.io/felix2000jp/${{ env.PROJECT_NAME }}:${{ env.COMMIT_SHA }}-cache
+          push: false
+          load: true
+      - name: Run unit tests
+        run: |
+          docker compose -f compose.yml up tests-unit --abort-on-container-exit
+          docker compose down
+
+  run-integration-tests:
+    name: Run integration tests
+    needs: [ build-builder-image ]
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: read
+    
+    steps:
+      - name: Checkout git repo
+        uses: actions/checkout@v4
+      - name: Set up docker buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build integration tests
+        uses: docker/build-push-action@v6
+        with:
+          tags: ${{ env.PROJECT_NAME }}-tests-integration
+          target: tests-integration
+          build-contexts: builder=docker-image://ghcr.io/felix2000jp/${{ env.PROJECT_NAME }}:${{ env.COMMIT_SHA }}
+          cache-from: type=registry,ref=ghcr.io/felix2000jp/${{ env.PROJECT_NAME }}:${{ env.COMMIT_SHA }}-cache
+          push: false
+          load: true
+      - name: Run integration tests
+        run: |
+          docker compose -f compose.yml up tests-integration --abort-on-container-exit
+          docker compose down
+
+  build-final-image:
+    name: Build final image
+    needs: [ run-unit-tests, run-integration-tests ]
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
+
+    permissions:
+      packages: write
+
+    steps:
+      - name: Set up docker buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to docker hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Docker metadata for final image
+        uses: docker/metadata-action@v5
+        with:
+          images: felix2000jp/${{ env.PROJECT_NAME }}
+          flavor: latest=false
+          tags: type=raw,value=${{ env.COMMIT_SHA }}
+        id: docker_meta
+      - name: Build final image
+        uses: docker/build-push-action@v6
+        with:
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          labels: ${{ steps.docker_meta.outputs.labels }}
+          build-contexts: builder=docker-image://ghcr.io/felix2000jp/${{ env.PROJECT_NAME }}:${{ env.COMMIT_SHA }}
+          cache-from: type=registry,ref=ghcr.io/felix2000jp/${{ env.PROJECT_NAME }}:${{ env.COMMIT_SHA }}-cache
+          push: true
+          load: false
+
+  clean-up-ghcr:
+    name: Clean up ghcr
+    needs: [ build-final-image ]
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+
+    permissions:
+      packages: write
+
+    steps:
+      - name: Delete untagged images
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ env.PROJECT_NAME }}
+          package-type: container
+          delete-only-untagged-versions: true
+      - name: Delete older images
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ env.PROJECT_NAME }}
+          package-type: container
+          min-versions-to-keep: 10

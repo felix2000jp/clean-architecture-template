@@ -1,0 +1,24 @@
+﻿{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "api": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "https://localhost:5000;http://localhost:8080",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ConnectionStrings__Default": "Host=localhost; Port=5432; Database=notes-db; Username=root; Password=1234",
+        "Serilog__Using__0": "Serilog.Sinks.Seq",
+        "Serilog__MinimumLevel__Default": "Information",
+        "Serilog__MinimumLevel__Override__Microsoft": "Information",
+        "Serilog__MinimumLevel__Override__Microsoft.AspNetCore": "Warning",
+        "Serilog__WriteTo__0__Name": "Seq",
+        "Serilog__WriteTo__0__Args__ServerUrl": "http://localhost:5341",
+        "Serilog__Enrich__0": "FromLogContext",
+        "Serilog__Properties__Application": "CleanArchitectureTemplate",
+        "Serilog__Properties__Environment": "Development"
+      }
+    }
+  }
+}

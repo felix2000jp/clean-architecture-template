@@ -1,0 +1,60 @@
+# To run unit tests -> docker compose up tests-unit
+# To run integration tests -> docker compose up tests-integration
+# To run the application manually -> docker compose up
+services:
+  tests-unit:
+    profiles: [ tests ]
+    build:
+      target: tests-unit
+  tests-integration:
+    profiles: [ tests ]
+    build:
+      target: tests-integration
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  notes:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      ALLOWEDHOSTS: "*"
+      ASPNETCORE_URLS: "http://notes"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__Default: "Host=database; Port=5432; Database=notes-db; Username=root; Password=1234"
+      Serilog__Using__0: "Serilog.Sinks.Seq"
+      Serilog__MinimumLevel__Default: "Information"
+      Serilog__MinimumLevel__Override__Microsoft: "Information"
+      Serilog__MinimumLevel__Override__Microsoft.AspNetCore: "Warning"
+      Serilog__WriteTo__0__Name: "Seq"
+      Serilog__WriteTo__0__Args__ServerUrl: "http://seq:5341"
+      Serilog__Enrich__0: "FromLogContext"
+      Serilog__Properties__Application: "CleanArchitectureTemplate"
+      Serilog__Properties__Environment: "Development"
+    ports:
+      - 8080:80
+    depends_on:
+      database:
+        condition: service_healthy
+        restart: true
+
+  seq:
+    image: datalust/seq
+    environment:
+      ACCEPT_EULA: "Y"
+    ports:
+      - 8081:80
+      - 5341:5341
+
+  database:
+    image: postgres
+    environment:
+      POSTGRES_DB: "notes-db"
+      POSTGRES_USER: "root"
+      POSTGRES_PASSWORD: "1234"
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -h database" ]
+      timeout: 3s
+      interval: 3s
