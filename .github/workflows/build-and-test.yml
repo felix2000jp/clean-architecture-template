@@ -27,7 +27,7 @@ jobs:
       - name: Install and run inspectcode
         run: |
           dotnet tool install JetBrains.ReSharper.GlobalTools --global --version ${{ env.RESHARPER_VERSION }}
-          jb inspectcode ./${{ env.PROJECT_NAME }}.sln --build --output=inspectcode.sarif --verbosity=WARN --severity=WARNING
+          jb inspectcode ./${{ env.PROJECT_NAME }}.sln --no-build --output=inspectcode.sarif --verbosity=WARN --severity=WARNING
           if jq -e '.runs[].results | length == 0' inspectcode.sarif > /dev/null; then
             echo "No issues found."
           else
