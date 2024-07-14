@@ -42,7 +42,7 @@ jobs:
 
   build-builder-image:
     name: Build builder image
-    needs: [ run-code-scanning-tools ]
+    needs: [ run-code-inspection ]
     runs-on: ubuntu-latest
 
     permissions:
