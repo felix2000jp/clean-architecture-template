@@ -12,7 +12,7 @@ env:
 
 jobs:
   run-code-inspection:
-    name: Run code scanning tools
+    name: Run code inspection
     runs-on: ubuntu-latest
     
     permissions:
