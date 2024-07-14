@@ -4,27 +4,24 @@
 
 This template makes use of GitHub actions for its CI/CD pipeline.
 
-Every commit 1 GitHub app and 1 GitHub workflow, making 7 status checks in total, will run against your changes and
-only if every check is successful, will you be able to merge your changes. Here is a rundown of those checks.
+Every commit 1 GitHub app and 1 GitHub workflow (with 5 jobs), making 6 status checks in total, will run against your
+changes and only if every check is successful, will you be able to merge your changes. Here is a rundown of those
+checks.
 
 ### GitHub Workflow - Build and Test
 
-This workflow is made of 4 different jobs and its intent is to build and test the application with your changes applied.
-
-#### Run code inspection
-
-This job is the **FIRST** to run on the workflow.
-
-It runs the cli tool JetBrains ReSharper InspectCode to perform code inspection on the code. If any warnings or errors
-are found the pipeline will be failed. In case of failure, you can see what issues were found in the output of the
-**Check for issues** step.
+This workflow is made of 5 different jobs and its intent is to build and test the application with your changes applied.
 
 #### Build builder image
 
-This job is dependent on [Run code inspection](#run-code-inspection).
+This job is the **FIRST** to run on the workflow.
 
-It builds the builder stage of the docker file and pushes the image (through the push option) and layer cache (through
-the cache-to option )to the GitHub packages registry, so that they can be used in the following jobs to improve
+It first runs the resharper code inspection tool against the code. If no issues were found the job keeps running, else
+the pipeline fails. In case of failure, you can see what issues were found in the output of the
+**Install and run inspectcode** step.
+
+It then builds the builder stage of the docker file and pushes the image (through the push option) and layer cache
+(through the cache-to option) to the GitHub packages registry, so that they can be used in the following jobs to improve
 performance.
 
 **NOTE:** Even though we have implemented both a cache (layer caching) and a build context (using already built images),
