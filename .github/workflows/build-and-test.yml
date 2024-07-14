@@ -9,7 +9,7 @@ on:
 env:
   COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
   PROJECT_NAME: clean-architecture-template
-  RESHARPER_VERSION: 2024.1
+  RESHARPER_VERSION: wakawakahehe
 
 jobs:
   build-builder-image:
