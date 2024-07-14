@@ -16,7 +16,8 @@ This workflow is made of 4 different jobs and its intent is to build and test th
 This job is the **FIRST** to run on the workflow.
 
 It runs the cli tool JetBrains ReSharper InspectCode to perform code inspection on the code. If any warnings or errors
-are found the pipeline will be failed.
+are found the pipeline will be failed. In case of failure, you can see what issues were found in the output of the
+**Check for issues** step.
 
 #### Build builder image
 
