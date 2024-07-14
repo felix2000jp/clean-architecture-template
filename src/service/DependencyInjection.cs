@@ -3,7 +3,7 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using service.Behaviours;
 using service.Notes;
-using service.Notes;
+using service.Notes
 
 namespace service;
 

@@ -26,7 +26,6 @@ jobs:
         uses: actions/setup-dotnet@v4
       - name: Install and run inspectcode
         run: |
-          set -e
           dotnet tool install JetBrains.ReSharper.GlobalTools --global --version ${{ env.RESHARPER_VERSION }}
           jb inspectcode ./${{ env.PROJECT_NAME }}.sln --build --output=inspectcode.sarif --verbosity=WARN --severity=WARNING
           if jq -e '.runs[].results | length == 0' inspectcode.sarif > /dev/null; then
@@ -78,7 +77,6 @@ jobs:
           load: true
       - name: Run unit tests
         run: |
-          set -e
           docker compose -f compose.yml up tests-unit --abort-on-container-exit
           docker compose down
         shell: bash
@@ -107,7 +105,6 @@ jobs:
           load: true
       - name: Run integration tests
         run: |
-          set -e
           docker compose -f compose.yml up tests-integration --abort-on-container-exit
           docker compose down
         shell: bash
