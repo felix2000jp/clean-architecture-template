@@ -11,7 +11,7 @@ env:
   COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
 
 jobs:
-  run-code-scanning-tools:
+  run-code-inspection:
     name: Run code scanning tools
     runs-on: ubuntu-latest
     

@@ -11,7 +11,7 @@ only if every check is successful, will you be able to merge your changes. Here 
 
 This workflow is made of 4 different jobs and its intent is to build and test the application with your changes applied.
 
-#### Run code scanning tools
+#### Run code inspection
 
 This job is the **FIRST** to run on the workflow.
 
@@ -21,7 +21,7 @@ are found the pipeline will be failed. In case of failure, you can see what issu
 
 #### Build builder image
 
-This job is dependent on [Run code scanning tools](#run-code-scanning-tools).
+This job is dependent on [Run code inspection](#run-code-inspection).
 
 It builds the builder stage of the docker file and pushes the image (through the push option) and layer cache (through
 the cache-to option )to the GitHub packages registry, so that they can be used in the following jobs to improve
