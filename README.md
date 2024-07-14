@@ -4,12 +4,13 @@
 
 This template makes use of GitHub actions for its CI/CD pipeline.
 
-Every commit 1 GitHub app and 1 GitHub workflow, making 7 status checks in total, will run against your changes and
-only if every check is successful, will you be able to merge your changes. Here is a rundown of those checks.
+Every commit 1 GitHub app and 1 GitHub workflow (with 5 jobs), making 6 status checks in total, will run against your
+changes and only if every check is successful, will you be able to merge your changes. Here is a rundown of those
+checks.
 
 ### GitHub Workflow - Build and Test
 
-This workflow is made of 4 different jobs and its intent is to build and test the application with your changes applied.
+This workflow is made of 5 different jobs and its intent is to build and test the application with your changes applied.
 
 #### Build builder image
 
