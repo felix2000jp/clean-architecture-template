@@ -3,7 +3,6 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using service.Behaviours;
 using service.Notes;
-using System;
 
 namespace service;
 
@@ -23,9 +22,5 @@ public static class DependencyInjection
             config.AddOpenBehavior(typeof(LoggingBehaviour<,>));
             config.AddOpenBehavior(typeof(ValidationBehaviour<,>));
         });
-
-        var List = Enumerable.Empty<string>();
-        List.FirstOrDefault();
-        List.FirstOrDefault();
     }
 }

@@ -18,11 +18,11 @@ This job is the **FIRST** to run on the workflow.
 
 It first runs the resharper code inspection tool against the code. If no issues were found the job keeps running, else
 the pipeline fails. In case of failure, you can see what issues were found in the output of the
-**Check for issues** step.
+**Install and run inspectcode** step.
 
-It then builds the builder stage of the docker file
-and pushes the image (through the push option) and layer cache (through the cache-to option )to the GitHub packages
-registry, so that they can be used in the following jobs to improve performance.
+It then builds the builder stage of the docker file and pushes the image (through the push option) and layer cache
+(through the cache-to option) to the GitHub packages registry, so that they can be used in the following jobs to improve
+performance.
 
 **NOTE:** Even though we have implemented both a cache (layer caching) and a build context (using already built images),
 if you take a look at the workflow summary you will see that the cache is never used. This happens because we cached
