@@ -22,5 +22,7 @@ public static class DependencyInjection
             config.AddOpenBehavior(typeof(LoggingBehaviour<,>));
             config.AddOpenBehavior(typeof(ValidationBehaviour<,>));
         });
+
+        string name = null;
     }
 }
