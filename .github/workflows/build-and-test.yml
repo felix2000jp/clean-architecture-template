@@ -7,31 +7,27 @@ on:
     branches: [ main ]
 
 env:
-  PROJECT_NAME: clean-architecture-template
   COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+  PROJECT_NAME: clean-architecture-template
+  RESHARPER_VERSION: 2024.1
 
 jobs:
-  run-code-inspection:
-    name: Run code inspection
+  build-builder-image:
+    name: Build builder image
     runs-on: ubuntu-latest
-    
+
     permissions:
-      security-events: write
-    
+      packages: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
-      - name: Install ReSharper command line tools
+      - name: Install and run inspectcode
         run: |
-          dotnet tool install JetBrains.ReSharper.GlobalTools --global --version 2024.1
-      - name: Inspect code with ReSharper
-        run: |
-          jb inspectcode ./${{ env.PROJECT_NAME }}.sln \
-          --build --output=inspectcode.sarif --verbosity=WARN --severity=WARNING
-      - name: Check for issues
-        run: |
+          dotnet tool install JetBrains.ReSharper.GlobalTools --global --version ${{ env.RESHARPER_VERSION }}
+          jb inspectcode ./${{ env.PROJECT_NAME }}.sln --build --output=inspectcode.sarif --verbosity=WARN --severity=WARNING
           if jq -e '.runs[].results | length == 0' inspectcode.sarif > /dev/null; then
             echo "No issues found."
           else
@@ -39,16 +35,7 @@ jobs:
             jq -r '.runs[].results[] | "\(.ruleId): \(.message.text) at \(.locations[].physicalLocation.artifactLocation.uri):\(.locations[].physicalLocation.region.startLine)"' inspectcode.sarif
             exit 1
           fi
-
-  build-builder-image:
-    name: Build builder image
-    needs: [ run-code-inspection ]
-    runs-on: ubuntu-latest
-
-    permissions:
-      packages: write
-
-    steps:
+        shell: bash
       - name: Set up docker buildx
         uses: docker/setup-buildx-action@v3
       - name: Login to ghcr.io registry
@@ -92,6 +79,7 @@ jobs:
         run: |
           docker compose -f compose.yml up tests-unit --abort-on-container-exit
           docker compose down
+        shell: bash
 
   run-integration-tests:
     name: Run integration tests
@@ -119,6 +107,7 @@ jobs:
         run: |
           docker compose -f compose.yml up tests-integration --abort-on-container-exit
           docker compose down
+        shell: bash
 
   build-final-image:
     name: Build final image

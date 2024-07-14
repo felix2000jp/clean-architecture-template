@@ -11,21 +11,17 @@ only if every check is successful, will you be able to merge your changes. Here 
 
 This workflow is made of 4 different jobs and its intent is to build and test the application with your changes applied.
 
-#### Run code inspection
+#### Build builder image
 
 This job is the **FIRST** to run on the workflow.
 
-It runs the cli tool JetBrains ReSharper InspectCode to perform code inspection on the code. If any warnings or errors
-are found the pipeline will be failed. In case of failure, you can see what issues were found in the output of the
+It first runs the resharper code inspection tool against the code. If no issues were found the job keeps running, else
+the pipeline fails. In case of failure, you can see what issues were found in the output of the
 **Check for issues** step.
 
-#### Build builder image
-
-This job is dependent on [Run code inspection](#run-code-inspection).
-
-It builds the builder stage of the docker file and pushes the image (through the push option) and layer cache (through
-the cache-to option )to the GitHub packages registry, so that they can be used in the following jobs to improve
-performance.
+It then builds the builder stage of the docker file
+and pushes the image (through the push option) and layer cache (through the cache-to option )to the GitHub packages
+registry, so that they can be used in the following jobs to improve performance.
 
 **NOTE:** Even though we have implemented both a cache (layer caching) and a build context (using already built images),
 if you take a look at the workflow summary you will see that the cache is never used. This happens because we cached
