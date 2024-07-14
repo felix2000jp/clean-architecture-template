@@ -11,8 +11,8 @@ env:
   COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
 
 jobs:
-  run-code-scanning-tools:
-    name: Run code scanning tools
+  run-code-inspection:
+    name: Run code inspection
     runs-on: ubuntu-latest
     
     permissions:
@@ -30,22 +30,19 @@ jobs:
         run: |
           jb inspectcode ./${{ env.PROJECT_NAME }}.sln \
           --build --output=inspectcode.sarif --verbosity=WARN --severity=WARNING
-      - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: inspectcode.sarif
-          category: resharper-inspectcode
-      - name: Check for warnings and errors
+      - name: Check for issues
         run: |
-          if grep -q '"results": \[\]' inspectcode.sarif; then
-            exit 0
+          if jq -e '.runs[].results | length == 0' inspectcode.sarif > /dev/null; then
+            echo "No issues found."
           else
+            echo "Issues detected!"
+            jq -r '.runs[].results[] | "\(.ruleId): \(.message.text) at \(.locations[].physicalLocation.artifactLocation.uri):\(.locations[].physicalLocation.region.startLine)"' inspectcode.sarif
             exit 1
           fi
 
   build-builder-image:
     name: Build builder image
-    needs: [ run-code-scanning-tools ]
+    needs: [ run-code-inspection ]
     runs-on: ubuntu-latest
 
     permissions:
