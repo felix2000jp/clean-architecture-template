@@ -81,3 +81,4 @@ the [angular commit message guidelines](https://github.com/angular/angular/blob/
 - style: Changes that do not affect the meaning of the code (white-space, formatting, missing semicolons, etc...)
 - test: Adding missing tests or correcting existing tests
 - revert: Revert existing code
+- chore: Changes that don't modify the source code directly but are important for maintaining the project
