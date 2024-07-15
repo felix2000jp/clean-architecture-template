@@ -24,12 +24,12 @@ public readonly record struct Result : IResult<ResultValue>
     /// <summary>
     /// Gets the value in case of success.
     /// </summary>
-    public ResultValue Value => _value ?? throw new InvalidOperationException("Value was expected but none were found");
+    public ResultValue Value => _value ?? throw new InvalidOperationException("Value was expected but none was found");
 
     /// <summary>
     /// Gets the error in case of failure.
     /// </summary>
-    public ResultError Error => _error ?? throw new InvalidOperationException("Error was expected but none were found");
+    public ResultError Error => _error ?? throw new InvalidOperationException("Error was expected but none was found");
 
     /// <summary>
     /// Executes the appropriate function based on the state of the <see cref="Result"/>.
@@ -48,12 +48,12 @@ public readonly record struct Result : IResult<ResultValue>
     }
 
     /// <summary>
-    /// Creates an <see cref="Result"/> from a value of type <see cref="ResultValue"/>.
+    /// Creates a <e cref="Result"/> from a value of type <see cref="ResultValue"/>.
     /// </summary>
     public static implicit operator Result(ResultValue value) => new(false, value: value);
 
     /// <summary>
-    /// Creates an <see cref="Result"/> from a value of type <see cref="ResultError"/>.
+    /// Creates a <see cref="Result"/> from a value of type <see cref="ResultError"/>.
     /// </summary>
     public static implicit operator Result(ResultError error) => new(true, error: error);
 }
@@ -82,12 +82,12 @@ public readonly record struct Result<TResultData> : IResult<TResultData>
     /// <summary>
     /// Gets the value in case of success.
     /// </summary>
-    public TResultData Value => _value ?? throw new InvalidOperationException("Value was expected but none were found");
+    public TResultData Value => _value ?? throw new InvalidOperationException("Value was expected but none was found");
 
     /// <summary>
     /// Gets the error in case of failure.
     /// </summary>
-    public ResultError Error => _error ?? throw new InvalidOperationException("Error was expected but none were found");
+    public ResultError Error => _error ?? throw new InvalidOperationException("Error was expected but none was found");
 
     /// <summary>
     /// If the state is a value, the provided function <paramref name="onValue"/> is executed and
@@ -118,12 +118,12 @@ public readonly record struct Result<TResultData> : IResult<TResultData>
     }
 
     /// <summary>
-    /// Creates an <see cref="Result{TResultData}"/> from a value of type <typeparamref name="TResultData"/>.
+    /// Creates a <see cref="Result{TResultData}"/> from a value of type <typeparamref name="TResultData"/>.
     /// </summary>
     public static implicit operator Result<TResultData>(TResultData value) => new(false, value: value);
 
     /// <summary>
-    /// Creates an <see cref="Result{TResultData}"/> from a value of type <see cref="ResultError"/>.
+    /// Creates a <see cref="Result{TResultData}"/> from a value of type <see cref="ResultError"/>.
     /// </summary>
     public static implicit operator Result<TResultData>(ResultError error) => new(true, error: error);
 }
