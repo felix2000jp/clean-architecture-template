@@ -12,9 +12,5 @@ public interface INoteService
 
     Task<Result> DeleteNote(Guid id, CancellationToken cancellationToken = default);
 
-    Task<Result> UpdateNote(
-        Guid id,
-        string title,
-        string description,
-        CancellationToken cancellationToken = default);
+    Task<Result> UpdateNote(Guid id, string title, string description, CancellationToken cancellationToken = default);
 }
