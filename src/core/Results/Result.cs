@@ -48,12 +48,12 @@ public readonly record struct Result : IResult<ResultValue>
     }
 
     /// <summary>
-    /// Creates an <see cref="Result"/> from a value of type <see cref="ResultValue"/>.
+    /// Creates a <e cref="Result"/> from a value of type <see cref="ResultValue"/>.
     /// </summary>
     public static implicit operator Result(ResultValue value) => new(false, value: value);
 
     /// <summary>
-    /// Creates an <see cref="Result"/> from a value of type <see cref="ResultError"/>.
+    /// Creates a <see cref="Result"/> from a value of type <see cref="ResultError"/>.
     /// </summary>
     public static implicit operator Result(ResultError error) => new(true, error: error);
 }
@@ -118,12 +118,12 @@ public readonly record struct Result<TResultData> : IResult<TResultData>
     }
 
     /// <summary>
-    /// Creates an <see cref="Result{TResultData}"/> from a value of type <typeparamref name="TResultData"/>.
+    /// Creates a <see cref="Result{TResultData}"/> from a value of type <typeparamref name="TResultData"/>.
     /// </summary>
     public static implicit operator Result<TResultData>(TResultData value) => new(false, value: value);
 
     /// <summary>
-    /// Creates an <see cref="Result{TResultData}"/> from a value of type <see cref="ResultError"/>.
+    /// Creates a <see cref="Result{TResultData}"/> from a value of type <see cref="ResultError"/>.
     /// </summary>
     public static implicit operator Result<TResultData>(ResultError error) => new(true, error: error);
 }
