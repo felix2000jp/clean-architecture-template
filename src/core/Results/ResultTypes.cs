@@ -33,80 +33,44 @@ public static class ResultTypes
 
     /// <summary>
     /// Creates an <see cref="ResultError"/> of type <see cref="HttpStatusCode.BadRequest"/>
-    /// in the problem details format.
-    /// </summary>
-    /// <returns>Returns a <see cref="ResultError"/>.</returns>
-    public static ResultError BadRequest() => new(
-        HttpStatusCode.BadRequest,
-        "Bad Request");
-
-    /// <summary>
-    /// Creates an <see cref="ResultError"/> of type <see cref="HttpStatusCode.BadRequest"/>
     /// in the problem details format with a given detail message.
     /// </summary>
     /// <param name="detail">The detail message.</param>
     /// <returns>Returns a <see cref="ResultError"/>.</returns>
-    public static ResultError BadRequest(string detail) => new(
+    public static ResultError BadRequest(string? detail = default) => new(
         HttpStatusCode.BadRequest,
         "Bad Request",
         Detail: detail);
 
     /// <summary>
     /// Creates an <see cref="ResultError"/> of type <see cref="HttpStatusCode.NotFound"/>
-    /// in the problem details format.
-    /// </summary>
-    /// <returns>Returns a <see cref="ResultError"/>.</returns>
-    public static ResultError NotFound() => new(
-        HttpStatusCode.NotFound,
-        "Not Found");
-
-    /// <summary>
-    /// Creates an <see cref="ResultError"/> of type <see cref="HttpStatusCode.NotFound"/>
     /// in the problem details format with a given detail message.
     /// </summary>
     /// <param name="detail">The detail message.</param>
     /// <returns>Returns a <see cref="ResultError"/>.</returns>
-    public static ResultError NotFound(string detail) => new(
+    public static ResultError NotFound(string? detail = default) => new(
         HttpStatusCode.NotFound,
         "Not Found",
         Detail: detail);
 
     /// <summary>
     /// Creates an <see cref="ResultError"/> of type <see cref="HttpStatusCode.Conflict"/>
-    /// in the problem details format.
-    /// </summary>
-    /// <returns>Returns a <see cref="ResultError"/>.</returns>
-    public static ResultError Conflict() => new(
-        HttpStatusCode.Conflict,
-        "Conflict");
-
-    /// <summary>
-    /// Creates an <see cref="ResultError"/> of type <see cref="HttpStatusCode.Conflict"/>
     /// in the problem details format with a given detail message.
     /// </summary>
     /// <param name="detail">The detail message.</param>
     /// <returns>Returns a <see cref="ResultError"/>.</returns>
-    public static ResultError Conflict(string detail) => new(
+    public static ResultError Conflict(string? detail = default) => new(
         HttpStatusCode.Conflict,
         "Conflict",
         Detail: detail);
 
     /// <summary>
     /// Creates an <see cref="ResultError"/> of type <see cref="HttpStatusCode.InternalServerError"/>
-    /// in the problem details format.
-    /// </summary>
-    /// <returns>Returns a <see cref="ResultError"/>.</returns>
-    public static ResultError InternalServerError() => new(
-        HttpStatusCode.InternalServerError,
-        "Internal Server Error");
-
-    /// <summary>
-    /// Creates an <see cref="ResultError"/> of type <see cref="HttpStatusCode.InternalServerError"/>
     /// in the problem details format with a given detail message.
     /// </summary>
     /// <param name="detail">The detail message.</param>
     /// <returns>Returns a <see cref="ResultError"/>.</returns>
-    public static ResultError InternalServerError(string detail) => new(
+    public static ResultError InternalServerError(string? detail = default) => new(
         HttpStatusCode.InternalServerError,
         "Internal Server Error",
         Detail: detail);
@@ -117,7 +81,7 @@ public static class ResultTypes
     /// </summary>
     /// <remarks>
     /// This is to be used only when the validation of a request fails on the request validation step.
-    /// Otherwise use <see cref="BadRequest()"/>
+    /// Otherwise use <see cref="BadRequest(string)"/>
     /// </remarks>
     /// <param name="validationErrors">The validation errors.</param>
     /// <returns>Returns a <see cref="ResultError"/>.</returns>
