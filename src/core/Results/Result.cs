@@ -24,12 +24,12 @@ public readonly record struct Result : IResult<ResultValue>
     /// <summary>
     /// Gets the value in case of success.
     /// </summary>
-    public ResultValue Value => _value ?? throw new InvalidOperationException("Value was expected but none were found");
+    public ResultValue Value => _value ?? throw new InvalidOperationException("Value was expected but none was found");
 
     /// <summary>
     /// Gets the error in case of failure.
     /// </summary>
-    public ResultError Error => _error ?? throw new InvalidOperationException("Error was expected but none were found");
+    public ResultError Error => _error ?? throw new InvalidOperationException("Error was expected but none was found");
 
     /// <summary>
     /// Executes the appropriate function based on the state of the <see cref="Result"/>.
@@ -82,12 +82,12 @@ public readonly record struct Result<TResultData> : IResult<TResultData>
     /// <summary>
     /// Gets the value in case of success.
     /// </summary>
-    public TResultData Value => _value ?? throw new InvalidOperationException("Value was expected but none were found");
+    public TResultData Value => _value ?? throw new InvalidOperationException("Value was expected but none was found");
 
     /// <summary>
     /// Gets the error in case of failure.
     /// </summary>
-    public ResultError Error => _error ?? throw new InvalidOperationException("Error was expected but none were found");
+    public ResultError Error => _error ?? throw new InvalidOperationException("Error was expected but none was found");
 
     /// <summary>
     /// If the state is a value, the provided function <paramref name="onValue"/> is executed and
