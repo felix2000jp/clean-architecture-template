@@ -18,7 +18,7 @@
         "Serilog__Enrich__0": "FromLogContext",
         "Serilog__Properties__Application": "CleanArchitectureTemplate",
         "Serilog__Properties__Environment": "Development",
-        "ConnectionStrings__Default": "Host=localhost; Port=5432; Database=notes-db; Username=root; Password=1234",
+        "ConnectionStrings__Default": "Host=localhost; Port=5432; Database=notes-db; Username=root; Password=1234"
       }
     }
   }
