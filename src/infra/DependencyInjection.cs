@@ -10,7 +10,7 @@ namespace infra;
 
 public static class DependencyInjection
 {
-    public static void AddInfraLayer(this IServiceCollection services, IConfigurationManager configuration)
+    public static void AddInfraLayer(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("Default");
         services.AddDbContext<DataContext>(options => options.UseNpgsql(connectionString));
