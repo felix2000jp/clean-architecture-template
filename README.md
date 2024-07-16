@@ -1,5 +1,12 @@
 # Clean Architecture Template
 
+## Configuration
+
+This project has two main configuration files, the **launchSettings.json** file - used to run the application manually - 
+and the **compose.yml** (the environment variables for the service *notes*) - used for running tests. The settings in 
+both files should be exactly the same, except for network related variables (example: database connection string) due to
+the way docker containers' networking works.
+
 ## CI/CD
 
 This template makes use of GitHub actions for its CI/CD pipeline.
