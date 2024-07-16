@@ -7,6 +7,7 @@
       "launchBrowser": false,
       "applicationUrl": "https://localhost:5000;http://localhost:8080",
       "environmentVariables": {
+        "ALLOWEDHOSTS": "*",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ConnectionStrings__Default": "Host=localhost; Port=5432; Database=notes-db; Username=root; Password=1234",
         "Serilog__Using__0": "Serilog.Sinks.Seq",
