@@ -3,11 +3,9 @@ using Serilog.Context;
 
 namespace api.Middlewares;
 
-public class LoggerCorrelationMiddleware(RequestDelegate next)
+public class LoggerCorrelationMiddleware : IMiddleware
 {
-    private readonly RequestDelegate _next = next;
-
-    public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         context.Request.Headers.TryGetValue(CustomHeaders.CorrelationId, out var headerValue);
         var correlationId = headerValue.FirstOrDefault() ?? Guid.NewGuid().ToString();
@@ -17,7 +15,7 @@ public class LoggerCorrelationMiddleware(RequestDelegate next)
 
         using (LogContext.PushProperty("correlationId", correlationId))
         {
-            await _next(context);
+            await next(context);
         }
     }
 }

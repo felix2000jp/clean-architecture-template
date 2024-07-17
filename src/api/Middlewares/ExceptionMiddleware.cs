@@ -4,16 +4,15 @@ using ILogger = Serilog.ILogger;
 
 namespace api.Middlewares;
 
-public class ExceptionMiddleware(RequestDelegate next, ILogger logger)
+public class ExceptionMiddleware(ILogger logger) : IMiddleware
 {
-    private readonly RequestDelegate _next = next;
     private readonly ILogger _logger = logger;
 
-    public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try
         {
-            await _next(context);
+            await next(context);
         }
         catch (Exception exception)
         {
