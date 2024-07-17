@@ -1,19 +1,22 @@
 using core;
 using core.Notes;
+using core.Settings;
 using infra.Context;
 using infra.Notes;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace infra;
 
 public static class DependencyInjection
 {
-    public static void AddInfraLayer(this IServiceCollection services, IConfiguration configuration)
+    public static void AddInfraLayer(this IServiceCollection services)
     {
-        var connectionString = configuration.GetConnectionString("Default");
-        services.AddDbContext<DataContext>(options => options.UseNpgsql(connectionString));
+        var name = PersistenceSettings.Section;
+        var serviceProvider = services.BuildServiceProvider();
+        var persistenceSettings = serviceProvider.GetRequiredService<IOptions<PersistenceSettings>>().Value;
+        services.AddDbContext<DataContext>(options => options.UseNpgsql(persistenceSettings.DatabaseConnection));
 
         services.AddScoped<INoteRepository, NoteRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();

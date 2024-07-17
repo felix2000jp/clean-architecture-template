@@ -29,7 +29,7 @@ services:
       Serilog__Enrich__0: "FromLogContext"
       Serilog__Properties__Application: "CleanArchitectureTemplate"
       Serilog__Properties__Environment: "Development"
-      ConnectionStrings__Default: "Host=database; Port=5432; Database=notes-db; Username=root; Password=1234"
+      Persistence__DatabaseConnection: "Host=database; Port=5432; Database=notes-db; Username=root; Password=1234"
     ports:
       - 8080:80
     depends_on:
