@@ -19,9 +19,7 @@ services:
       dockerfile: Dockerfile
     environment:
       ALLOWEDHOSTS: "*"
-      ASPNETCORE_URLS: "http://notes"
       ASPNETCORE_ENVIRONMENT: "Development"
-      ConnectionStrings__Default: "Host=database; Port=5432; Database=notes-db; Username=root; Password=1234"
       Serilog__Using__0: "Serilog.Sinks.Seq"
       Serilog__MinimumLevel__Default: "Information"
       Serilog__MinimumLevel__Override__Microsoft: "Information"
@@ -31,9 +29,12 @@ services:
       Serilog__Enrich__0: "FromLogContext"
       Serilog__Properties__Application: "CleanArchitectureTemplate"
       Serilog__Properties__Environment: "Development"
+      Persistence__DatabaseConnection: "Host=database; Port=5432; Database=notes-db; Username=root; Password=1234"
     ports:
       - 8080:80
     depends_on:
+      seq:
+        condition: service_started
       database:
         condition: service_healthy
         restart: true
