@@ -11,10 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
 
     builder.Services
-        .AddOptions<ApplicationSettings>()
-        .BindConfiguration(ApplicationSettings.Section)
-        .ValidateDataAnnotations();
-    builder.Services
         .AddOptionsWithValidateOnStart<PersistenceSettings>()
         .BindConfiguration(PersistenceSettings.Section)
         .ValidateDataAnnotations();

@@ -1,3 +1,4 @@
+using core.Settings;
 using infra.Context;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -19,14 +20,12 @@ public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        var databaseConnectionString = _databaseContainer.GetConnectionString();
-
         builder.ConfigureServices(services =>
         {
-            var dataContextDescriptor = services.Single(x => x.ServiceType == typeof(DbContextOptions<DataContext>));
-            services.Remove(dataContextDescriptor);
-
-            services.AddDbContext<DataContext>(options => options.UseNpgsql(databaseConnectionString));
+            services.Configure<PersistenceSettings>(options =>
+            {
+                options.DatabaseConnection = _databaseContainer.GetConnectionString();
+            });
         });
     }
 
