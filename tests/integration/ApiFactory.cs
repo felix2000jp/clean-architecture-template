@@ -23,13 +23,8 @@ public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
         builder.ConfigureServices(services =>
         {
-            var dataContextDescriptor =
-                services.SingleOrDefault(x => x.ServiceType == typeof(DbContextOptions<DataContext>));
-
-            if (dataContextDescriptor is not null)
-            {
-                services.Remove(dataContextDescriptor);
-            }
+            var dataContextDescriptor = services.Single(x => x.ServiceType == typeof(DbContextOptions<DataContext>));
+            services.Remove(dataContextDescriptor);
 
             services.AddDbContext<DataContext>(options => options.UseNpgsql(databaseConnectionString));
         });
