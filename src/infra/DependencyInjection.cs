@@ -13,10 +13,11 @@ public static class DependencyInjection
 {
     public static void AddInfraLayer(this IServiceCollection services)
     {
-        var serviceProvider = services.BuildServiceProvider();
-        var persistenceSettings = serviceProvider.GetRequiredService<IOptions<PersistenceSettings>>().Value;
-
-        services.AddDbContext<DataContext>(options => options.UseNpgsql(persistenceSettings.DatabaseConnection));
+        services.AddDbContext<DataContext>((serviceProvider, options) =>
+        {
+            var persistenceSettings = serviceProvider.GetRequiredService<IOptions<PersistenceSettings>>().Value;
+            options.UseNpgsql(persistenceSettings.DatabaseConnection);
+        });
         services.AddScoped<INoteRepository, NoteRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
