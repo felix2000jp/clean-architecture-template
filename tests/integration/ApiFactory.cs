@@ -1,7 +1,6 @@
-using infra.Context;
+using core.Settings;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
 using Xunit;
@@ -19,18 +18,12 @@ public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        var connectionString = _databaseContainer.GetConnectionString();
-
         builder.ConfigureServices(services =>
         {
-            var descriptor = services.SingleOrDefault(x => x.ServiceType == typeof(DbContextOptions<DataContext>));
-
-            if (descriptor is not null)
+            services.Configure<PersistenceSettings>(options =>
             {
-                services.Remove(descriptor);
-            }
-
-            services.AddDbContext<DataContext>(options => options.UseNpgsql(connectionString));
+                options.DatabaseConnection = _databaseContainer.GetConnectionString();
+            });
         });
     }
 
