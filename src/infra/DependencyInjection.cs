@@ -15,8 +15,8 @@ public static class DependencyInjection
     {
         services.AddDbContext<DataContext>((serviceProvider, options) =>
         {
-            var persistenceSettings = serviceProvider.GetRequiredService<IOptions<PersistenceSettings>>().Value;
-            options.UseNpgsql(persistenceSettings.DatabaseConnection);
+            var persistenceSettings = serviceProvider.GetRequiredService<IOptions<PersistenceSettings>>();
+            options.UseNpgsql(persistenceSettings.Value.DatabaseConnection);
         });
         services.AddScoped<INoteRepository, NoteRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
