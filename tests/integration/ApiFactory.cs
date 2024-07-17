@@ -19,18 +19,19 @@ public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        var connectionString = _databaseContainer.GetConnectionString();
+        var databaseConnectionString = _databaseContainer.GetConnectionString();
 
         builder.ConfigureServices(services =>
         {
-            var descriptor = services.SingleOrDefault(x => x.ServiceType == typeof(DbContextOptions<DataContext>));
+            var dataContextDescriptor =
+                services.SingleOrDefault(x => x.ServiceType == typeof(DbContextOptions<DataContext>));
 
-            if (descriptor is not null)
+            if (dataContextDescriptor is not null)
             {
-                services.Remove(descriptor);
+                services.Remove(dataContextDescriptor);
             }
 
-            services.AddDbContext<DataContext>(options => options.UseNpgsql(connectionString));
+            services.AddDbContext<DataContext>(options => options.UseNpgsql(databaseConnectionString));
         });
     }
 
