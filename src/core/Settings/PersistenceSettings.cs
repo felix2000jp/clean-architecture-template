@@ -4,5 +4,5 @@ namespace core.Settings;
 
 public sealed class PersistenceSettings : Settings<PersistenceSettings>
 {
-    [Required] public string DatabaseConnection { get; set; } = string.Empty;
+    [Required] public required string DatabaseConnection { get; set; }
 }

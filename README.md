@@ -8,7 +8,8 @@ both files should be exactly the same, except for network related variables (exa
 the way docker containers' networking works.
 
 Also, in this project I am using the Options pattern. In the **core** project inside the folder **Settings** you can see
-some example settings classes that describe different configuration sections.
+some example classes that describe different configuration sections. When adding a new **Settings class** make
+sure it inherits from **Settings abstract class** and its name has the suffix *Settings*.
 
 ## CI/CD
 
